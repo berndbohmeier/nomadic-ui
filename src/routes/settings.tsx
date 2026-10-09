@@ -1,5 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Container, Select, Stack, Text, Title, useMantineColorScheme } from "@mantine/core";
+import {
+  Container,
+  Select,
+  Stack,
+  Text,
+  Title,
+  useMantineColorScheme,
+} from "@mantine/core";
 import type { MantineColorScheme } from "@mantine/core";
 
 export const Route = createFileRoute("/settings")({ component: Settings });

@@ -1,8 +1,20 @@
-import { createRootRouteWithContext, Link, Outlet } from "@tanstack/react-router";
+import {
+  createRootRouteWithContext,
+  Link,
+  Outlet,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { QueryClient } from "@tanstack/react-query";
-import { ActionIcon, AppShell, Group, NavLink, Stack, Text, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  AppShell,
+  Group,
+  NavLink,
+  Stack,
+  Text,
+  Tooltip,
+} from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import {
   IconFlask,
@@ -28,17 +40,32 @@ function RootLayout() {
   });
 
   return (
-    <AppShell navbar={{ width: collapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH, breakpoint: 0 }}>
+    <AppShell
+      navbar={{
+        width: collapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH,
+        breakpoint: 0,
+      }}
+    >
       <AppShell.Navbar p="xs">
         <Stack justify="space-between" h="100%">
           <Stack gap={4}>
-            <Group h={40} px="xs" wrap="nowrap" justify={collapsed ? "center" : "flex-start"}>
+            <Group
+              h={40}
+              px="xs"
+              wrap="nowrap"
+              justify={collapsed ? "center" : "flex-start"}
+            >
               <Text fw={700} size="lg" truncate>
                 {collapsed ? "N" : "Nomadic"}
               </Text>
             </Group>
             {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
-              <Tooltip key={to} label={label} position="right" disabled={!collapsed}>
+              <Tooltip
+                key={to}
+                label={label}
+                position="right"
+                disabled={!collapsed}
+              >
                 <NavLink
                   component={Link}
                   to={to}
@@ -58,7 +85,10 @@ function RootLayout() {
             ))}
           </Stack>
           <Group justify={collapsed ? "center" : "flex-end"}>
-            <Tooltip label={collapsed ? "Expand sidebar" : "Collapse sidebar"} position="right">
+            <Tooltip
+              label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+              position="right"
+            >
               <ActionIcon
                 variant="subtle"
                 color="gray"
@@ -82,12 +112,14 @@ function RootLayout() {
   );
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  component: () => (
-    <>
-      <RootLayout />
-      <TanStackRouterDevtools position="top-right" />
-      <ReactQueryDevtools buttonPosition="bottom-right" />
-    </>
-  ),
-});
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
+  {
+    component: () => (
+      <>
+        <RootLayout />
+        <TanStackRouterDevtools position="top-right" />
+        <ReactQueryDevtools buttonPosition="bottom-right" />
+      </>
+    ),
+  },
+);
