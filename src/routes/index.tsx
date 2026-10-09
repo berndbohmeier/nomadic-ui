@@ -1,16 +1,18 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
+import { createFileRoute } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
+import reactLogo from "../assets/react.svg";
 import { invoke } from "@tauri-apps/api/core";
-import "./App.css";
+import "../App.css";
 
-function App() {
-  const [greetMsg, setGreetMsg] = useState("");
+export const Route = createFileRoute("/")({ component: Index });
+
+function Index() {
   const [name, setName] = useState("");
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
+  const greet = useMutation({
+    mutationFn: (name: string) => invoke<string>("greet", { name }),
+  });
 
   return (
     <main className="container">
@@ -33,7 +35,7 @@ function App() {
         className="row"
         onSubmit={(e) => {
           e.preventDefault();
-          greet();
+          greet.mutate(name);
         }}
       >
         <input
@@ -43,9 +45,7 @@ function App() {
         />
         <button type="submit">Greet</button>
       </form>
-      <p>{greetMsg}</p>
+      <p>{greet.data}</p>
     </main>
   );
 }
-
-export default App;
