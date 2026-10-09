@@ -30,5 +30,13 @@
   "start": {
     "title": "Accueil",
     "welcome": "Bienvenue dans Nomadic."
+  },
+  "workspace": {
+    "change": "Changer d'espace de travail",
+    "choose": "Choisir un dossier…",
+    "invalid": "Espace de travail invalide (dossier \"results\" manquant) : {{path}}",
+    "none": "Aucun espace de travail sélectionné",
+    "recent": "Espaces de travail récents",
+    "remove": "Retirer de la liste"
   }
 }

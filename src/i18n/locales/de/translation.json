@@ -30,5 +30,13 @@
   "start": {
     "title": "Start",
     "welcome": "Willkommen bei Nomadic."
+  },
+  "workspace": {
+    "change": "Arbeitsbereich wechseln",
+    "choose": "Ordner auswählen…",
+    "invalid": "Kein gültiger Arbeitsbereich (Ordner \"results\" fehlt): {{path}}",
+    "none": "Kein Arbeitsbereich ausgewählt",
+    "recent": "Zuletzt verwendete Arbeitsbereiche",
+    "remove": "Aus der Liste entfernen"
   }
 }

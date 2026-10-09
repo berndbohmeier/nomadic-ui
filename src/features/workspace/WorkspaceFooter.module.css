@@ -1,0 +1,8 @@
+.trigger {
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.trigger:hover {
+  background-color: var(--mantine-color-default-border);
+}

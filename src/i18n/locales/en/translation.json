@@ -30,5 +30,13 @@
   "start": {
     "title": "Start",
     "welcome": "Welcome to Nomadic."
+  },
+  "workspace": {
+    "change": "Change workspace",
+    "choose": "Choose folder…",
+    "invalid": "Not a valid workspace (missing \"results\" folder): {{path}}",
+    "none": "No workspace selected",
+    "recent": "Recent workspaces",
+    "remove": "Remove from list"
   }
 }

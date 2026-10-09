@@ -25,6 +25,8 @@ import {
   IconSettings,
 } from "@tabler/icons-react";
 
+import { WorkspaceFooter } from "../features/workspace/WorkspaceFooter";
+
 const NAV_ITEMS = [
   { to: "/", labelKey: "nav.start", icon: IconHome2 },
   { to: "/experiments", labelKey: "nav.experiments", icon: IconFlask },
@@ -43,12 +45,24 @@ function RootLayout() {
 
   return (
     <AppShell
+      layout="alt"
       navbar={{
         width: collapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH,
         breakpoint: 0,
       }}
+      footer={{ height: 32 }}
     >
-      <AppShell.Navbar p="xs">
+      <AppShell.Footer
+        withBorder={false}
+        bg="var(--mantine-color-default-hover)"
+      >
+        <WorkspaceFooter />
+      </AppShell.Footer>
+      <AppShell.Navbar
+        p="xs"
+        withBorder={false}
+        bg="var(--mantine-color-default-hover)"
+      >
         <Stack justify="space-between" h="100%">
           <Stack gap={4}>
             <Group
