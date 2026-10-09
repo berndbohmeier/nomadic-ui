@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { MantineProvider } from "@mantine/core";
+import "@mantine/core/styles.css";
 import { routeTree } from "./routeTree.gen";
 
 const queryClient = new QueryClient();
@@ -21,7 +23,9 @@ declare module "@tanstack/react-router" {
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <MantineProvider defaultColorScheme="auto">
+        <RouterProvider router={router} />
+      </MantineProvider>
     </QueryClientProvider>
   </React.StrictMode>,
 );
