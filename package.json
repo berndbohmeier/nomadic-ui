@@ -4,12 +4,14 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "mock": "vite --mode mock",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "tauri": "tauri",
+    "test:e2e": "playwright test",
     "lint": "eslint .",
     "lint:css": "stylelint \"src/**/*.css\" --allow-empty-input",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"*.{js,ts,json,cjs,mjs,html}\"",
@@ -31,6 +33,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
+    "@playwright/test": "^1.64.0",
     "@storybook/addon-a11y": "^10.6.1",
     "@storybook/addon-docs": "^10.6.1",
     "@storybook/react-vite": "^10.6.1",

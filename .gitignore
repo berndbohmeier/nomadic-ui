@@ -21,3 +21,7 @@ pnpm-debug.log*
 .DS_Store
 # Storybook
 storybook-static/
+
+# Playwright
+test-results/
+playwright-report/

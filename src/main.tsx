@@ -6,12 +6,15 @@ import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import "./i18n";
 import { routeTree } from "./routeTree.gen";
+import { createBackend } from "./backend/create-backend";
+import { BackendContext } from "./app/context";
 
+const backend = await createBackend();
 const queryClient = new QueryClient();
 
 const router = createRouter({
   routeTree,
-  context: { queryClient },
+  context: { queryClient, backend },
   defaultPreload: "intent",
 });
 
@@ -23,10 +26,12 @@ declare module "@tanstack/react-router" {
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <MantineProvider defaultColorScheme="auto">
-        <RouterProvider router={router} />
-      </MantineProvider>
-    </QueryClientProvider>
+    <BackendContext.Provider value={backend}>
+      <QueryClientProvider client={queryClient}>
+        <MantineProvider defaultColorScheme="auto">
+          <RouterProvider router={router} />
+        </MantineProvider>
+      </QueryClientProvider>
+    </BackendContext.Provider>
   </React.StrictMode>,
 );

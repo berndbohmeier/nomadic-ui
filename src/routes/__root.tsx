@@ -25,6 +25,7 @@ import {
   IconSettings,
 } from "@tabler/icons-react";
 
+import type { Backend } from "../backend/contract";
 import { WorkspaceFooterContainer } from "../features/workspace/WorkspaceFooterContainer";
 
 const NAV_ITEMS = [
@@ -133,14 +134,15 @@ function RootLayout() {
   );
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
-  {
-    component: () => (
-      <>
-        <RootLayout />
-        <TanStackRouterDevtools position="top-right" />
-        <ReactQueryDevtools buttonPosition="bottom-right" />
-      </>
-    ),
-  },
-);
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient;
+  backend: Backend;
+}>()({
+  component: () => (
+    <>
+      <RootLayout />
+      <TanStackRouterDevtools position="top-right" />
+      <ReactQueryDevtools buttonPosition="bottom-right" />
+    </>
+  ),
+});

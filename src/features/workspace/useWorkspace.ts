@@ -1,20 +1,10 @@
 import { useLocalStorage } from "@mantine/hooks";
-import { invoke } from "@tauri-apps/api/core";
+import { useBackend } from "../../app/context";
 
 const MAX_HISTORY = 10;
 
-interface WorkspaceInfo {
-  valid: boolean;
-  hasMetadata: boolean;
-  hasBeds: boolean;
-}
-
-export async function validateWorkspace(path: string): Promise<boolean> {
-  const info = await invoke<WorkspaceInfo>("validate_workspace", { path });
-  return info.valid;
-}
-
 export function useWorkspace() {
+  const backend = useBackend();
   const [activeWorkspace, setActiveWorkspace] = useLocalStorage<string | null>({
     key: "nomadic-workspace-active",
     defaultValue: null,
@@ -28,7 +18,7 @@ export function useWorkspace() {
 
   /** Activates the workspace if valid; returns whether it was valid. */
   const selectWorkspace = async (path: string): Promise<boolean> => {
-    if (!(await validateWorkspace(path))) return false;
+    if (!(await backend.workspace.validate(path))) return false;
     setActiveWorkspace(path);
     setHistory((prev) =>
       [path, ...prev.filter((p) => p !== path)].slice(0, MAX_HISTORY),
