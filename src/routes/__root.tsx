@@ -16,6 +16,7 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
+import { useTranslation } from "react-i18next";
 import {
   IconFlask,
   IconHome2,
@@ -25,15 +26,16 @@ import {
 } from "@tabler/icons-react";
 
 const NAV_ITEMS = [
-  { to: "/", label: "Start", icon: IconHome2 },
-  { to: "/experiments", label: "Experiments", icon: IconFlask },
-  { to: "/settings", label: "Settings", icon: IconSettings },
+  { to: "/", labelKey: "nav.start", icon: IconHome2 },
+  { to: "/experiments", labelKey: "nav.experiments", icon: IconFlask },
+  { to: "/settings", labelKey: "nav.settings", icon: IconSettings },
 ] as const;
 
 const EXPANDED_WIDTH = 220;
 const COLLAPSED_WIDTH = 64;
 
 function RootLayout() {
+  const { t } = useTranslation();
   const [collapsed, setCollapsed] = useLocalStorage({
     key: "nomadic-sidebar-collapsed",
     defaultValue: false,
@@ -59,40 +61,45 @@ function RootLayout() {
                 {collapsed ? "N" : "Nomadic"}
               </Text>
             </Group>
-            {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
-              <Tooltip
-                key={to}
-                label={label}
-                position="right"
-                disabled={!collapsed}
-              >
-                <NavLink
-                  component={Link}
-                  to={to}
-                  activeOptions={{ exact: to === "/" }}
-                  label={collapsed ? undefined : label}
-                  aria-label={label}
-                  leftSection={<Icon size={22} stroke={1.5} />}
-                  styles={{
-                    root: {
-                      borderRadius: "var(--mantine-radius-sm)",
-                      justifyContent: collapsed ? "center" : undefined,
-                    },
-                    section: collapsed ? { marginInlineEnd: 0 } : undefined,
-                  }}
-                />
-              </Tooltip>
-            ))}
+            {NAV_ITEMS.map(({ to, labelKey, icon: Icon }) => {
+              const label = t(labelKey);
+              return (
+                <Tooltip
+                  key={to}
+                  label={label}
+                  position="right"
+                  disabled={!collapsed}
+                >
+                  <NavLink
+                    component={Link}
+                    to={to}
+                    activeOptions={{ exact: to === "/" }}
+                    label={collapsed ? undefined : label}
+                    aria-label={label}
+                    leftSection={<Icon size={22} stroke={1.5} />}
+                    styles={{
+                      root: {
+                        borderRadius: "var(--mantine-radius-sm)",
+                        justifyContent: collapsed ? "center" : undefined,
+                      },
+                      section: collapsed ? { marginInlineEnd: 0 } : undefined,
+                    }}
+                  />
+                </Tooltip>
+              );
+            })}
           </Stack>
           <Group justify={collapsed ? "center" : "flex-end"}>
             <Tooltip
-              label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+              label={
+                collapsed ? t("nav.expandSidebar") : t("nav.collapseSidebar")
+              }
               position="right"
             >
               <ActionIcon
                 variant="subtle"
                 color="gray"
-                aria-label="Toggle sidebar"
+                aria-label={t("nav.toggleSidebar")}
                 onClick={() => setCollapsed((c) => !c)}
               >
                 {collapsed ? (

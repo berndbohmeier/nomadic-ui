@@ -1,0 +1,34 @@
+{
+  "experiments": {
+    "empty": "Vos expériences de séquençage apparaîtront ici.",
+    "title": "Expériences"
+  },
+  "nav": {
+    "collapseSidebar": "Réduire la barre latérale",
+    "expandSidebar": "Développer la barre latérale",
+    "experiments": "Expériences",
+    "settings": "Paramètres",
+    "start": "Accueil",
+    "toggleSidebar": "Basculer la barre latérale"
+  },
+  "settings": {
+    "colorScheme": {
+      "auto": "Automatique",
+      "dark": "Sombre",
+      "description": "Choisissez le mode clair, le mode sombre ou suivez le réglage de votre système.",
+      "label": "Thème de couleur",
+      "light": "Clair"
+    },
+    "language": {
+      "description": "Choisissez la langue d'affichage ou suivez la langue de votre système.",
+      "label": "Langue",
+      "system": "Langue du système"
+    },
+    "subtitle": "Paramètres de l'application.",
+    "title": "Paramètres"
+  },
+  "start": {
+    "title": "Accueil",
+    "welcome": "Bienvenue dans Nomadic."
+  }
+}

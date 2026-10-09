@@ -1,0 +1,34 @@
+{
+  "experiments": {
+    "empty": "Your sequencing experiments will appear here.",
+    "title": "Experiments"
+  },
+  "nav": {
+    "collapseSidebar": "Collapse sidebar",
+    "expandSidebar": "Expand sidebar",
+    "experiments": "Experiments",
+    "settings": "Settings",
+    "start": "Start",
+    "toggleSidebar": "Toggle sidebar"
+  },
+  "settings": {
+    "colorScheme": {
+      "auto": "Auto",
+      "dark": "Dark",
+      "description": "Choose light mode, dark mode, or follow your system setting.",
+      "label": "Color scheme",
+      "light": "Light"
+    },
+    "language": {
+      "description": "Choose the display language or follow your system language.",
+      "label": "Language",
+      "system": "System default"
+    },
+    "subtitle": "Application settings.",
+    "title": "Settings"
+  },
+  "start": {
+    "title": "Start",
+    "welcome": "Welcome to Nomadic."
+  }
+}

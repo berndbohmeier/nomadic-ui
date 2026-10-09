@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
+import "./i18n";
 import { routeTree } from "./routeTree.gen";
 
 const queryClient = new QueryClient();
