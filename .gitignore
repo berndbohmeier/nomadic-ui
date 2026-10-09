@@ -19,3 +19,5 @@ pnpm-debug.log*
 
 # macOS
 .DS_Store
+# Storybook
+storybook-static/

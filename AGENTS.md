@@ -22,6 +22,7 @@ like number of mapped reads, amplicon coverage, quality metrics as well as resis
 
 ## Instructions
 - Always translate the UI into all supported languages using i18next.
+- Split components into feature-based directories under `src/features`. Split components into pure presentational components (Foo) and the connection logic to state and data (FooContainer). Prefer colocating related files within the same feature directory. Prefer pure components when possible and create a storybook story for each component.
 
 
 ## Internationalization

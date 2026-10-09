@@ -25,7 +25,7 @@ import {
   IconSettings,
 } from "@tabler/icons-react";
 
-import { WorkspaceFooter } from "../features/workspace/WorkspaceFooter";
+import { WorkspaceFooterContainer } from "../features/workspace/WorkspaceFooterContainer";
 
 const NAV_ITEMS = [
   { to: "/", labelKey: "nav.start", icon: IconHome2 },
@@ -56,7 +56,7 @@ function RootLayout() {
         withBorder={false}
         bg="var(--mantine-color-default-hover)"
       >
-        <WorkspaceFooter />
+        <WorkspaceFooterContainer />
       </AppShell.Footer>
       <AppShell.Navbar
         p="xs"

@@ -6,7 +6,12 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: ["dist/**", "src/routeTree.gen.ts", "src-tauri/**"],
+    ignores: [
+      "dist/**",
+      "src/routeTree.gen.ts",
+      "src-tauri/**",
+      "storybook-static/**",
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
