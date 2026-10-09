@@ -1,6 +1,8 @@
 {
   "experiments": {
-    "empty": "Your sequencing experiments will appear here.",
+    "empty": "No experiments found in this workspace.",
+    "error": "Could not load experiments.",
+    "noWorkspace": "Select a workspace to see its experiments.",
     "title": "Experiments"
   },
   "nav": {

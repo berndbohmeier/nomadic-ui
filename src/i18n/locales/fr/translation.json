@@ -1,6 +1,8 @@
 {
   "experiments": {
-    "empty": "Vos expériences de séquençage apparaîtront ici.",
+    "empty": "Aucune expérience trouvée dans cet espace de travail.",
+    "error": "Impossible de charger les expériences.",
+    "noWorkspace": "Sélectionnez un espace de travail pour voir ses expériences.",
     "title": "Expériences"
   },
   "nav": {

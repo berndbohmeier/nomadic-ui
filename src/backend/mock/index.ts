@@ -8,6 +8,10 @@ export function createMockBackend(): Backend {
     workspace: {
       pickFolder: () => Promise.resolve(MOCK_WORKSPACE_PATH),
       validate: (path) => Promise.resolve(validPaths.has(path)),
+      listExperiments: (path) =>
+        Promise.resolve(
+          validPaths.has(path) ? ["experiment-001", "experiment-002"] : [],
+        ),
     },
   };
 }

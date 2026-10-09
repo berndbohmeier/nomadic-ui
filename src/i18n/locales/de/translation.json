@@ -1,6 +1,8 @@
 {
   "experiments": {
-    "empty": "Ihre Sequenzierungsexperimente werden hier angezeigt.",
+    "empty": "Keine Experimente in diesem Workspace gefunden.",
+    "error": "Experimente konnten nicht geladen werden.",
+    "noWorkspace": "Wähle einen Workspace, um seine Experimente zu sehen.",
     "title": "Experimente"
   },
   "nav": {

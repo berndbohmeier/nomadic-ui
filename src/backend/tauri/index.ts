@@ -21,6 +21,9 @@ export function createTauriBackend(): Backend {
         });
         return info.valid;
       },
+      listExperiments(path) {
+        return invoke<string[]>("list_experiments", { path });
+      },
     },
   };
 }
