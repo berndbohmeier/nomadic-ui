@@ -12,7 +12,7 @@ export const Route = createFileRoute("/experiment-window")({
 function ExperimentWindowRoute() {
   const { path } = Route.useSearch();
   return (
-    <Container p="md" fluid>
+    <Container px="md" pb="md" fluid>
       <ExperimentPage key={path} path={path} />
     </Container>
   );

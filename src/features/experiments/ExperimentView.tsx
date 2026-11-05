@@ -1,4 +1,5 @@
-import { Group, Stack, Tabs, Text, Title } from "@mantine/core";
+import { Box, Group, Tabs, Text, Title } from "@mantine/core";
+import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import type { ExperimentInfo } from "../../backend/contract";
 import { BarcodesLink } from "./barcodes/BarcodesLink";
@@ -9,27 +10,36 @@ import { SettingsPanel } from "./SettingsPanel";
 
 interface ExperimentViewProps {
   experiment: ExperimentInfo;
+  /** Rendered at the top of the pinned header, e.g. a back link. */
+  headerTop?: ReactNode;
 }
 
-export function ExperimentView({ experiment }: ExperimentViewProps) {
+export function ExperimentView({ experiment, headerTop }: ExperimentViewProps) {
   return (
     // Keyed so the barcode selection is never shared between experiments.
     <BarcodeSelectionProvider
       key={experiment.path}
       experimentPath={experiment.path}
     >
-      <ExperimentContent experiment={experiment} />
+      <ExperimentContent experiment={experiment} headerTop={headerTop} />
     </BarcodeSelectionProvider>
   );
 }
 
-function ExperimentContent({ experiment }: ExperimentViewProps) {
+function ExperimentContent({ experiment, headerTop }: ExperimentViewProps) {
   const { t } = useTranslation();
   const panels = getAvailablePanels(experiment);
 
   return (
-    <Stack>
-      <div>
+    <Tabs defaultValue={panels[0]?.panel.id ?? "settings"} keepMounted={false}>
+      <Box
+        pos="sticky"
+        top={0}
+        pt="md"
+        bg="var(--mantine-color-body)"
+        style={{ zIndex: 10 }}
+      >
+        {headerTop}
         <Group gap="xs" wrap="nowrap">
           <Title order={2}>{experiment.name}</Title>
           <OpenExperimentWindowButton
@@ -41,12 +51,7 @@ function ExperimentContent({ experiment }: ExperimentViewProps) {
           {experiment.path}
         </Text>
         <BarcodesLink />
-      </div>
-      <Tabs
-        defaultValue={panels[0]?.panel.id ?? "settings"}
-        keepMounted={false}
-      >
-        <Tabs.List>
+        <Tabs.List mt="md">
           {panels.map(({ panel }) => (
             <Tabs.Tab key={panel.id} value={panel.id}>
               {panel.label(t)}
@@ -56,15 +61,15 @@ function ExperimentContent({ experiment }: ExperimentViewProps) {
             {t("experiments.settings.title")}
           </Tabs.Tab>
         </Tabs.List>
-        {panels.map(({ panel: { id, Component }, file }) => (
-          <Tabs.Panel key={id} value={id} pt="md">
-            <Component experiment={experiment} file={file} />
-          </Tabs.Panel>
-        ))}
-        <Tabs.Panel value="settings" pt="md">
-          <SettingsPanel settings={experiment.settings} />
+      </Box>
+      {panels.map(({ panel: { id, Component }, file }) => (
+        <Tabs.Panel key={id} value={id} pt="md">
+          <Component experiment={experiment} file={file} />
         </Tabs.Panel>
-      </Tabs>
-    </Stack>
+      ))}
+      <Tabs.Panel value="settings" pt="md">
+        <SettingsPanel settings={experiment.settings} />
+      </Tabs.Panel>
+    </Tabs>
   );
 }
