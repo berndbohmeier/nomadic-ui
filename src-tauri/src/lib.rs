@@ -1,3 +1,5 @@
+mod read_mapping;
+
 #[derive(serde::Serialize)]
 #[serde(rename_all = "camelCase")]
 struct WorkspaceInfo {
@@ -98,6 +100,13 @@ fn load_experiment(path: String) -> Result<ExperimentInfo, String> {
     read_experiment(std::path::Path::new(&path))
 }
 
+#[tauri::command]
+async fn load_read_mapping(path: String) -> Result<Vec<read_mapping::ReadMappingDatum>, String> {
+    tauri::async_runtime::spawn_blocking(move || read_mapping::load(std::path::Path::new(&path)))
+        .await
+        .map_err(|error| format!("Read mapping task failed: {error}"))?
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -115,6 +124,20 @@ mod tests {
     }
 
     #[test]
+    fn read_mapping_command_loads_test_experiment() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../test_data/nomadic/results/2025_07_28_new_dbs");
+        let rows =
+            tauri::async_runtime::block_on(load_read_mapping(root.to_string_lossy().into_owned()))
+                .unwrap();
+        assert_eq!(rows.len(), 48);
+        assert_eq!(
+            serde_json::to_value(&rows[0]).unwrap()["sampleId"],
+            "3D7_100_N"
+        );
+    }
+
+    #[test]
     fn rejects_missing_dir() {
         assert!(read_experiment(std::path::Path::new("/definitely/not/here")).is_err());
     }
@@ -128,7 +151,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             validate_workspace,
             list_experiments,
-            load_experiment
+            load_experiment,
+            load_read_mapping
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
-import type { Backend, ExperimentInfo } from "../contract";
+import type { Backend, ExperimentInfo, ReadMappingDatum } from "../contract";
 
 interface WorkspaceInfo {
   valid: boolean;
@@ -13,6 +13,9 @@ export function createTauriBackend(): Backend {
     experiments: {
       load(path) {
         return invoke<ExperimentInfo>("load_experiment", { path });
+      },
+      loadReadMapping(path) {
+        return invoke<ReadMappingDatum[]>("load_read_mapping", { path });
       },
     },
     workspace: {

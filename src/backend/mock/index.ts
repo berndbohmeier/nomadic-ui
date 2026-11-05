@@ -1,4 +1,5 @@
 import type { Backend } from "../contract";
+import { readMappingData } from "./read-mapping";
 
 export const MOCK_WORKSPACE_PATH = "/mock/workspaces/run-001";
 
@@ -36,6 +37,8 @@ export function createMockBackend(
           },
           files: MOCK_EXPERIMENT_FILES,
         }),
+      loadReadMapping: () =>
+        Promise.resolve(readMappingData.map((row) => ({ ...row }))),
       ...overrides.experiments,
     },
     workspace: {

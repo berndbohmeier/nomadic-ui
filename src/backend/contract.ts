@@ -21,10 +21,24 @@ export interface ExperimentInfo {
   files: string[];
 }
 
+export interface ReadMappingDatum {
+  barcode: string;
+  sampleId: string;
+  sampleType: "sample" | "positive" | "negative";
+  n_total: number;
+  n_mapped: number;
+  n_primary: number;
+  n_secondary: number;
+  n_supplementary: number;
+  n_unmapped: number;
+}
+
 export interface Backend {
   experiments: {
     /** Loads an experiment from its full folder path (any location). */
     load(path: string): Promise<ExperimentInfo>;
+    /** Read counts joined with experiment-local sample metadata by barcode. */
+    loadReadMapping(path: string): Promise<ReadMappingDatum[]>;
   };
   workspace: {
     /** Lets the user choose a folder; resolves to null when cancelled. */
