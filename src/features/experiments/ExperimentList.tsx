@@ -4,9 +4,15 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useBackend } from "../../app/context";
 import { useWorkspace } from "../workspace/useWorkspace";
+import { joinPath } from "./joinPath";
 import { parseExperimentName } from "./parseExperimentName";
 
-export function ExperimentList() {
+interface ExperimentListProps {
+  /** Called with the full path of the experiment folder. */
+  onOpen?: (path: string) => void;
+}
+
+export function ExperimentList({ onOpen }: ExperimentListProps) {
   const { t, i18n } = useTranslation();
   const backend = useBackend();
   const { activeWorkspace } = useWorkspace();
@@ -30,7 +36,18 @@ export function ExperimentList() {
   return (
     <SimpleGrid cols={{ base: 1, sm: 2, lg: 3, xl: 4 }}>
       {experiments.map(parseExperimentName).map(({ id, date, label }) => (
-        <Card key={id} withBorder padding="md" radius="md" title={id}>
+        <Card
+          key={id}
+          withBorder
+          padding="md"
+          radius="md"
+          title={id}
+          component="button"
+          type="button"
+          ta="left"
+          style={{ cursor: onOpen ? "pointer" : undefined }}
+          onClick={() => onOpen?.(joinPath(activeWorkspace, "results", id))}
+        >
           <Group gap="xs" wrap="nowrap" align="flex-start">
             <IconFlask size={20} />
             <Text fw={500} lineClamp={2} style={{ wordBreak: "break-word" }}>

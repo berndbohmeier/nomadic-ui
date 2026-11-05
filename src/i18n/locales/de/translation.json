@@ -3,7 +3,30 @@
     "empty": "Keine Experimente in diesem Workspace gefunden.",
     "error": "Experimente konnten nicht geladen werden.",
     "noWorkspace": "Wähle einen Workspace, um seine Experimente zu sehen.",
-    "title": "Experimente"
+    "panels": {
+      "aaChange": "AA-Änderungen",
+      "placeholder": "Platzhalter für {{file}}",
+      "readMapping": "Read-Mapping",
+      "regionCoverage": "Regionsabdeckung"
+    },
+    "settings": {
+      "caller": "Caller",
+      "fastqDir": "FASTQ-Verzeichnis",
+      "metadataCsv": "Metadaten-CSV",
+      "minknowDir": "MinKNOW-Verzeichnis",
+      "missing": "Keine Einstellungen für dieses Experiment gefunden.",
+      "nBarcodes": "Barcodes",
+      "nRegions": "Regionen",
+      "referenceName": "Referenz",
+      "regionBed": "Regions-BED",
+      "startDate": "Startdatum der Verarbeitung",
+      "title": "Einstellungen"
+    },
+    "title": "Experimente",
+    "view": {
+      "back": "← Zurück zu den Experimenten",
+      "error": "Dieses Experiment konnte nicht geladen werden."
+    }
   },
   "nav": {
     "collapseSidebar": "Seitenleiste einklappen",

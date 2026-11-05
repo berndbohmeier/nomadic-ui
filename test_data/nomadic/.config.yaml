@@ -1,0 +1,4 @@
+defaults:
+  caller: delve
+  reference_name: Pf3D7
+  region_bed: nomadsMVP

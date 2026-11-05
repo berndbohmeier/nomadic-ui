@@ -3,7 +3,30 @@
     "empty": "No experiments found in this workspace.",
     "error": "Could not load experiments.",
     "noWorkspace": "Select a workspace to see its experiments.",
-    "title": "Experiments"
+    "panels": {
+      "aaChange": "AA changes",
+      "placeholder": "Placeholder for {{file}}",
+      "readMapping": "Read mapping",
+      "regionCoverage": "Region coverage"
+    },
+    "settings": {
+      "caller": "Caller",
+      "fastqDir": "FASTQ directory",
+      "metadataCsv": "Metadata CSV",
+      "minknowDir": "MinKNOW directory",
+      "missing": "No settings found for this experiment.",
+      "nBarcodes": "Barcodes",
+      "nRegions": "Regions",
+      "referenceName": "Reference",
+      "regionBed": "Region BED",
+      "startDate": "Processing start date",
+      "title": "Settings"
+    },
+    "title": "Experiments",
+    "view": {
+      "back": "← Back to experiments",
+      "error": "Could not load this experiment."
+    }
   },
   "nav": {
     "collapseSidebar": "Collapse sidebar",

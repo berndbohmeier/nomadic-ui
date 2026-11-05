@@ -3,7 +3,30 @@
     "empty": "Aucune expérience trouvée dans cet espace de travail.",
     "error": "Impossible de charger les expériences.",
     "noWorkspace": "Sélectionnez un espace de travail pour voir ses expériences.",
-    "title": "Expériences"
+    "panels": {
+      "aaChange": "Changements d'AA",
+      "placeholder": "Espace réservé pour {{file}}",
+      "readMapping": "Mapping des reads",
+      "regionCoverage": "Couverture des régions"
+    },
+    "settings": {
+      "caller": "Caller",
+      "fastqDir": "Dossier FASTQ",
+      "metadataCsv": "CSV de métadonnées",
+      "minknowDir": "Dossier MinKNOW",
+      "missing": "Aucun paramètre trouvé pour cette expérience.",
+      "nBarcodes": "Codes-barres",
+      "nRegions": "Régions",
+      "referenceName": "Référence",
+      "regionBed": "BED des régions",
+      "startDate": "Date de début du traitement",
+      "title": "Paramètres"
+    },
+    "title": "Expériences",
+    "view": {
+      "back": "← Retour aux expériences",
+      "error": "Impossible de charger cette expérience."
+    }
   },
   "nav": {
     "collapseSidebar": "Réduire la barre latérale",
