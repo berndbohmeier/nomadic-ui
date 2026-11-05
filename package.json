@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
-    "@playwright/test": "^1.64.0",
+    "@playwright/test": "^1.64.1",
     "@storybook/addon-a11y": "^10.6.1",
     "@storybook/addon-docs": "^10.6.1",
     "@storybook/addon-vitest": "^10.6.5",
@@ -65,6 +65,6 @@
     "vitest": "latest",
     "@vitest/browser-playwright": "latest",
     "@vitest/coverage-v8": "latest",
-    "playwright": "latest"
+    "playwright": "^1.64.1"
   }
 }
