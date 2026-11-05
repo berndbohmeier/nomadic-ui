@@ -21,10 +21,16 @@ export interface ExperimentInfo {
   files: string[];
 }
 
-export interface ReadMappingDatum {
+export interface BarcodeMetadata {
   barcode: string;
+  /** Empty when the metadata has no sample id for the barcode. */
   sampleId: string;
   sampleType: "sample" | "positive" | "negative";
+}
+
+/** One row of `summary.read_mapping.csv`. */
+export interface ReadMappingCounts {
+  barcode: string;
   n_total: number;
   n_mapped: number;
   n_primary: number;
@@ -33,12 +39,17 @@ export interface ReadMappingDatum {
   n_unmapped: number;
 }
 
+/** Read counts combined with sample metadata (done in the UI). */
+export type ReadMappingDatum = ReadMappingCounts & BarcodeMetadata;
+
 export interface Backend {
   experiments: {
     /** Loads an experiment from its full folder path (any location). */
     load(path: string): Promise<ExperimentInfo>;
-    /** Read counts joined with experiment-local sample metadata by barcode. */
-    loadReadMapping(path: string): Promise<ReadMappingDatum[]>;
+    /** Rows of the read mapping file only; no sample metadata. */
+    loadReadMapping(path: string): Promise<ReadMappingCounts[]>;
+    /** Samples of the experiment's metadata CSV, in file order. */
+    loadMetadata(path: string): Promise<BarcodeMetadata[]>;
   };
   workspace: {
     /** Lets the user choose a folder; resolves to null when cancelled. */

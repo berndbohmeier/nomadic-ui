@@ -52,3 +52,33 @@ test("opens an experiment and switches panel tabs", async ({ page }) => {
   await page.getByRole("tab", { name: "Settings" }).click();
   await expect(page.getByText("Pf3D7")).toBeVisible();
 });
+
+test("filters read mapping with the barcode selection and resets per experiment", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Change workspace" }).click();
+  await page.getByRole("menuitem", { name: "Choose folder…" }).click();
+  await page.getByRole("link", { name: "Experiments" }).click();
+  await page.getByRole("button", { name: "experiment-001" }).click();
+
+  await page.getByRole("button", { name: "48 Barcodes" }).click();
+  const dialog = page.getByRole("dialog");
+  await dialog.getByRole("button", { name: "Select none" }).click();
+  await dialog.getByRole("checkbox", { name: "Select barcode02" }).check();
+  await dialog.getByRole("button", { name: "Apply" }).click();
+
+  await expect(dialog).toBeHidden();
+  await expect(
+    page.getByRole("button", { name: "Select Sample_02 (barcode02)" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Select .*\(barcode47\)/ }),
+  ).toHaveCount(0);
+
+  await page.getByRole("link", { name: "Experiments", exact: true }).click();
+  await page.getByRole("button", { name: "experiment-002" }).click();
+  await expect(
+    page.getByRole("button", { name: /Select .*\(barcode47\)/ }),
+  ).toBeVisible();
+});

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AAChangePanel } from "./AAChangePanel";
+import { BarcodeSelectionProvider } from "../barcodes/BarcodeSelection";
 import { ReadMappingPanel } from "./ReadMappingPanel";
 import { RegionCoveragePanel } from "./RegionCoveragePanel";
 
@@ -13,6 +14,13 @@ const experiment = {
 const meta = {
   title: "Experiments/Panels",
   component: ReadMappingPanel,
+  decorators: [
+    (Story) => (
+      <BarcodeSelectionProvider experimentPath={experiment.path}>
+        <Story />
+      </BarcodeSelectionProvider>
+    ),
+  ],
   args: { experiment, file: "summary.read_mapping.csv" },
 } satisfies Meta<typeof ReadMappingPanel>;
 

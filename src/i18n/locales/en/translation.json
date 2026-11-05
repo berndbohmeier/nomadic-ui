@@ -1,5 +1,23 @@
 {
   "experiments": {
+    "barcodes": {
+      "apply": "Apply",
+      "barcode": "Barcode",
+      "cancel": "Cancel",
+      "count": "{{selected}} of {{total}} selected",
+      "drag": "Reorder {{barcode}}",
+      "error": "Could not load the barcodes.",
+      "link_one": "{{count}} Barcode",
+      "link_other": "{{count}} Barcodes",
+      "resetOrder": "Reset order",
+      "sampleName": "Sample name",
+      "sampleType": "Sample type",
+      "select": "Select {{barcode}}",
+      "selectAll": "Select all",
+      "selectNone": "Select none",
+      "title": "Barcodes",
+      "typeSample": "Sample"
+    },
     "empty": "No experiments found in this workspace.",
     "error": "Could not load experiments.",
     "noWorkspace": "Select a workspace to see its experiments.",

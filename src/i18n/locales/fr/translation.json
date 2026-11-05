@@ -1,5 +1,24 @@
 {
   "experiments": {
+    "barcodes": {
+      "apply": "Appliquer",
+      "barcode": "Code-barres",
+      "cancel": "Annuler",
+      "count": "{{selected}} sur {{total}} sélectionnés",
+      "drag": "Réorganiser {{barcode}}",
+      "error": "Impossible de charger les codes-barres.",
+      "link_one": "{{count}} code-barres",
+      "link_many": "",
+      "link_other": "{{count}} codes-barres",
+      "resetOrder": "Réinitialiser l'ordre",
+      "sampleName": "Nom de l'échantillon",
+      "sampleType": "Type d'échantillon",
+      "select": "Sélectionner {{barcode}}",
+      "selectAll": "Tout sélectionner",
+      "selectNone": "Tout désélectionner",
+      "title": "Codes-barres",
+      "typeSample": "Échantillon"
+    },
     "empty": "Aucune expérience trouvée dans cet espace de travail.",
     "error": "Impossible de charger les expériences.",
     "noWorkspace": "Sélectionnez un espace de travail pour voir ses expériences.",

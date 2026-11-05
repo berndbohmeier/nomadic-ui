@@ -1,3 +1,4 @@
+mod metadata;
 mod read_mapping;
 
 #[derive(serde::Serialize)]
@@ -101,10 +102,17 @@ fn load_experiment(path: String) -> Result<ExperimentInfo, String> {
 }
 
 #[tauri::command]
-async fn load_read_mapping(path: String) -> Result<Vec<read_mapping::ReadMappingDatum>, String> {
+async fn load_read_mapping(path: String) -> Result<Vec<read_mapping::ReadMappingCounts>, String> {
     tauri::async_runtime::spawn_blocking(move || read_mapping::load(std::path::Path::new(&path)))
         .await
         .map_err(|error| format!("Read mapping task failed: {error}"))?
+}
+
+#[tauri::command]
+async fn load_metadata(path: String) -> Result<Vec<metadata::BarcodeMetadata>, String> {
+    tauri::async_runtime::spawn_blocking(move || metadata::load(std::path::Path::new(&path)))
+        .await
+        .map_err(|error| format!("Metadata task failed: {error}"))?
 }
 
 #[cfg(test)]
@@ -131,6 +139,17 @@ mod tests {
             tauri::async_runtime::block_on(load_read_mapping(root.to_string_lossy().into_owned()))
                 .unwrap();
         assert_eq!(rows.len(), 48);
+        assert_eq!(serde_json::to_value(&rows[0]).unwrap()["n_primary"], 7871);
+    }
+
+    #[test]
+    fn metadata_command_loads_test_experiment() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../test_data/nomadic/results/2025_07_28_new_dbs");
+        let rows =
+            tauri::async_runtime::block_on(load_metadata(root.to_string_lossy().into_owned()))
+                .unwrap();
+        assert_eq!(rows.len(), 48);
         assert_eq!(
             serde_json::to_value(&rows[0]).unwrap()["sampleId"],
             "3D7_100_N"
@@ -152,7 +171,8 @@ pub fn run() {
             validate_workspace,
             list_experiments,
             load_experiment,
-            load_read_mapping
+            load_read_mapping,
+            load_metadata
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

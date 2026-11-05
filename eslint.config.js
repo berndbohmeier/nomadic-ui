@@ -17,7 +17,7 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   reactHooks.configs.flat.recommended,
-  ...pluginQuery.configs['flat/recommended'],
+  ...pluginQuery.configs["flat/recommended"],
   jsxA11y.flatConfigs.recommended,
   {
     files: ["**/*.{js,mjs,cjs,ts,tsx}"],

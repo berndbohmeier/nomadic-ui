@@ -1,5 +1,23 @@
 {
   "experiments": {
+    "barcodes": {
+      "apply": "Übernehmen",
+      "barcode": "Barcode",
+      "cancel": "Abbrechen",
+      "count": "{{selected}} von {{total}} ausgewählt",
+      "drag": "{{barcode}} verschieben",
+      "error": "Barcodes konnten nicht geladen werden.",
+      "link_one": "{{count}} Barcode",
+      "link_other": "{{count}} Barcodes",
+      "resetOrder": "Reihenfolge zurücksetzen",
+      "sampleName": "Probenname",
+      "sampleType": "Probentyp",
+      "select": "{{barcode}} auswählen",
+      "selectAll": "Alle auswählen",
+      "selectNone": "Keine auswählen",
+      "title": "Barcodes",
+      "typeSample": "Probe"
+    },
     "empty": "Keine Experimente in diesem Workspace gefunden.",
     "error": "Experimente konnten nicht geladen werden.",
     "noWorkspace": "Wähle einen Workspace, um seine Experimente zu sehen.",

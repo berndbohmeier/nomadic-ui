@@ -1,4 +1,8 @@
-import type { ReadMappingDatum } from "../contract";
+import type {
+  BarcodeMetadata,
+  ReadMappingCounts,
+  ReadMappingDatum,
+} from "../contract";
 
 /** In-memory browser data; native experiment CSVs are loaded with Polars. */
 export const unclassifiedReadMapping: ReadMappingDatum = {
@@ -49,3 +53,23 @@ export const readMappingData: ReadMappingDatum[] = [
     };
   }),
 ];
+
+export const metadataData: BarcodeMetadata[] = readMappingData
+  .filter((row) => row !== unclassifiedReadMapping)
+  .map(({ barcode, sampleId, sampleType }) => ({
+    barcode,
+    sampleId,
+    sampleType,
+  }));
+
+export const readMappingCountsData: ReadMappingCounts[] = readMappingData.map(
+  (row) => ({
+    barcode: row.barcode,
+    n_total: row.n_total,
+    n_mapped: row.n_mapped,
+    n_primary: row.n_primary,
+    n_secondary: row.n_secondary,
+    n_supplementary: row.n_supplementary,
+    n_unmapped: row.n_unmapped,
+  }),
+);

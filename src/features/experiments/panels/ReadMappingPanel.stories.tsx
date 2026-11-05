@@ -2,10 +2,18 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 import { ReadMappingPanel } from "./ReadMappingPanel";
 import i18n from "../../../i18n";
+import { BarcodeSelectionProvider } from "../barcodes/BarcodeSelection";
 
 const meta = {
   title: "Experiments/Read mapping/Panel",
   component: ReadMappingPanel,
+  decorators: [
+    (Story) => (
+      <BarcodeSelectionProvider experimentPath="/data/results/experiment">
+        <Story />
+      </BarcodeSelectionProvider>
+    ),
+  ],
   args: {
     experiment: {
       path: "/data/results/experiment",
@@ -44,7 +52,12 @@ export const Loading: Story = {
 export const Empty: Story = {
   parameters: {
     testProviders: {
-      backend: { experiments: { loadReadMapping: () => Promise.resolve([]) } },
+      backend: {
+        experiments: {
+          loadReadMapping: () => Promise.resolve([]),
+          loadMetadata: () => Promise.resolve([]),
+        },
+      },
     },
   },
 };
@@ -71,7 +84,7 @@ export const MissingMetadata: Story = {
     testProviders: {
       backend: {
         experiments: {
-          loadReadMapping: () => Promise.reject("METADATA_CSV_NOT_FOUND"),
+          loadMetadata: () => Promise.reject("METADATA_CSV_NOT_FOUND"),
         },
       },
     },
@@ -88,7 +101,7 @@ export const AmbiguousMetadata: Story = {
     testProviders: {
       backend: {
         experiments: {
-          loadReadMapping: () => Promise.reject("METADATA_CSV_AMBIGUOUS"),
+          loadMetadata: () => Promise.reject("METADATA_CSV_AMBIGUOUS"),
         },
       },
     },

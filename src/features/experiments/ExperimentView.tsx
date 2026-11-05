@@ -1,6 +1,8 @@
 import { Stack, Tabs, Text, Title } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import type { ExperimentInfo } from "../../backend/contract";
+import { BarcodesLink } from "./barcodes/BarcodesLink";
+import { BarcodeSelectionProvider } from "./barcodes/BarcodeSelection";
 import { getAvailablePanels } from "./panels/registry";
 import { SettingsPanel } from "./SettingsPanel";
 
@@ -9,6 +11,18 @@ interface ExperimentViewProps {
 }
 
 export function ExperimentView({ experiment }: ExperimentViewProps) {
+  return (
+    // Keyed so the barcode selection is never shared between experiments.
+    <BarcodeSelectionProvider
+      key={experiment.path}
+      experimentPath={experiment.path}
+    >
+      <ExperimentContent experiment={experiment} />
+    </BarcodeSelectionProvider>
+  );
+}
+
+function ExperimentContent({ experiment }: ExperimentViewProps) {
   const { t } = useTranslation();
   const panels = getAvailablePanels(experiment);
 
@@ -19,6 +33,7 @@ export function ExperimentView({ experiment }: ExperimentViewProps) {
         <Text c="dimmed" size="sm" style={{ wordBreak: "break-all" }}>
           {experiment.path}
         </Text>
+        <BarcodesLink />
       </div>
       <Tabs
         defaultValue={panels[0]?.panel.id ?? "settings"}
