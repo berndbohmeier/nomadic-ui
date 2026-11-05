@@ -12,6 +12,9 @@ like number of mapped reads, amplicon coverage, quality metrics as well as resis
 - TanStack Query for data fetching and caching
 - Mantine for building the user interface components
 - i18next + react-i18next for internationalization
+- Vitest for testing of components and logic
+- Playwright for end-to-end tests
+
 
 ## Commands
 - `pnpm install` to install the project dependencies
@@ -27,7 +30,7 @@ Only `src/backend/tauri/` may import `@tauri-apps/*` (plus `isTauri` in `create-
 
 ## Instructions
 - Always translate the UI into all supported languages using i18next.
-- Split components into feature-based directories under `src/features`. Split components into pure presentational components (Foo) and the connection logic to state and data (FooContainer). Prefer colocating related files within the same feature directory. Prefer pure components when possible and create a storybook story for each component.
+- Split components into feature-based directories under `src/features`. Prefer colocating related files within the same feature directory. Prefer pure components when possible and create a storybook story for each component.
 
 
 ## Internationalization

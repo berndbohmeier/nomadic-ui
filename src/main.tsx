@@ -7,9 +7,11 @@ import "@mantine/core/styles.css";
 import "./i18n";
 import { routeTree } from "./routeTree.gen";
 import { createBackend } from "./backend/create-backend";
-import { BackendContext } from "./app/context";
+import { BackendContext, StorageContext } from "./app/context";
+import { createBrowserStorage } from "./storage/browser";
 
 const backend = await createBackend();
+const storage = createBrowserStorage();
 const queryClient = new QueryClient();
 
 const router = createRouter({
@@ -27,11 +29,13 @@ declare module "@tanstack/react-router" {
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <BackendContext.Provider value={backend}>
-      <QueryClientProvider client={queryClient}>
-        <MantineProvider defaultColorScheme="auto">
-          <RouterProvider router={router} />
-        </MantineProvider>
-      </QueryClientProvider>
+      <StorageContext.Provider value={storage}>
+        <QueryClientProvider client={queryClient}>
+          <MantineProvider defaultColorScheme="auto">
+            <RouterProvider router={router} />
+          </MantineProvider>
+        </QueryClientProvider>
+      </StorageContext.Provider>
     </BackendContext.Provider>
   </React.StrictMode>,
 );

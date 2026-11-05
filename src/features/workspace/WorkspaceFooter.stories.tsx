@@ -1,20 +1,18 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { userEvent, within } from "storybook/test";
 import { AppShell } from "@mantine/core";
-import { fn } from "storybook/test";
 import { WorkspaceFooter } from "./WorkspaceFooter";
+
+const validPath = "/Users/lab/runs/2025-01-plasmodium";
+const history = [
+  validPath,
+  "/Users/lab/runs/2025-02-plasmodium",
+  "/Users/lab/runs/2025-03-plasmodium",
+];
 
 const meta = {
   title: "Workspace/WorkspaceFooter",
   component: WorkspaceFooter,
-  args: {
-    activeWorkspace: null,
-    history: [],
-    error: null,
-    onSelect: fn(),
-    onRemove: fn(),
-    onChoose: fn(),
-  },
   decorators: [
     (Story) => (
       <AppShell footer={{ height: 32 }}>
@@ -24,35 +22,56 @@ const meta = {
       </AppShell>
     ),
   ],
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    testProviders: {
+      backend: {
+        workspace: {
+          validate: (path: string) => Promise.resolve(history.includes(path)),
+        },
+      },
+    },
+  },
 } satisfies Meta<typeof WorkspaceFooter>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const history = [
-  "/Users/lab/runs/2025-01-plasmodium",
-  "/Users/lab/runs/2025-02-plasmodium",
-  "/Users/lab/runs/2025-03-plasmodium",
-];
+const populatedStorage = {
+  "nomadic-workspace-active": JSON.stringify(validPath),
+  "nomadic-workspace-history": JSON.stringify(history),
+};
 
 export const NoWorkspace: Story = {};
 
 export const WithWorkspace: Story = {
-  args: { activeWorkspace: history[0], history },
+  parameters: { testProviders: { storage: populatedStorage } },
 };
 
 export const HistoryOpen: Story = {
-  args: { activeWorkspace: history[0], history },
+  parameters: { testProviders: { storage: populatedStorage } },
   play: async ({ canvasElement }) => {
     await userEvent.click(await within(canvasElement).findByRole("button"));
   },
 };
 
 export const InvalidWorkspace: Story = {
-  args: {
-    activeWorkspace: history[0],
-    history,
-    error: `"/tmp/not-a-workspace" is not a valid workspace`,
+  parameters: {
+    testProviders: {
+      storage: populatedStorage,
+      backend: {
+        workspace: {
+          pickFolder: () => Promise.resolve("/tmp/not-a-workspace"),
+        },
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(await canvas.findByRole("button"));
+    const document = within(canvasElement.ownerDocument.body);
+    await userEvent.click(
+      await document.findByRole("menuitem", { name: /Choose/ }),
+    );
   },
 };

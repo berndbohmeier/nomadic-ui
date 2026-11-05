@@ -1,19 +1,17 @@
-import { useLocalStorage } from "@mantine/hooks";
 import { useBackend } from "../../app/context";
+import { useStorage } from "../../storage/useStorage";
 
 const MAX_HISTORY = 10;
 
 export function useWorkspace() {
   const backend = useBackend();
-  const [activeWorkspace, setActiveWorkspace] = useLocalStorage<string | null>({
+  const [activeWorkspace, setActiveWorkspace] = useStorage<string | null>({
     key: "nomadic-workspace-active",
     defaultValue: null,
-    getInitialValueInEffect: false,
   });
-  const [history, setHistory] = useLocalStorage<string[]>({
+  const [history, setHistory] = useStorage<string[]>({
     key: "nomadic-workspace-history",
     defaultValue: [],
-    getInitialValueInEffect: false,
   });
 
   /** Activates the workspace if valid; returns whether it was valid. */

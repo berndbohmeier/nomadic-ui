@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Container, Stack, Title } from "@mantine/core";
 import { useTranslation } from "react-i18next";
-import { ExperimentListContainer } from "../features/experiments/ExperimentListContainer";
+import { ExperimentList } from "../features/experiments/ExperimentList";
 
 export const Route = createFileRoute("/experiments")({
   component: Experiments,
@@ -13,7 +13,7 @@ function Experiments() {
     <Container p="md" fluid>
       <Title order={2}>{t("experiments.title")}</Title>
       <Stack mt="md">
-        <ExperimentListContainer />
+        <ExperimentList />
       </Stack>
     </Container>
   );

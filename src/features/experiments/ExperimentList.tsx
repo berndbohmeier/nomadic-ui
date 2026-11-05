@@ -1,26 +1,30 @@
 import { Badge, Card, Group, Loader, SimpleGrid, Text } from "@mantine/core";
 import { IconFlask } from "@tabler/icons-react";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { useBackend } from "../../app/context";
+import { useWorkspace } from "../workspace/useWorkspace";
 import { parseExperimentName } from "./parseExperimentName";
 
-export interface ExperimentListProps {
-  experiments: string[];
-  loading: boolean;
-  error: boolean;
-  hasWorkspace: boolean;
-}
-
-export function ExperimentList({
-  experiments,
-  loading,
-  error,
-  hasWorkspace,
-}: ExperimentListProps) {
+export function ExperimentList() {
   const { t, i18n } = useTranslation();
+  const backend = useBackend();
+  const { activeWorkspace } = useWorkspace();
+  const {
+    data: experiments = [],
+    isPending,
+    isError,
+  } = useQuery({
+    queryKey: ["experiments", activeWorkspace],
+    queryFn: () => backend.workspace.listExperiments(activeWorkspace!),
+    enabled: activeWorkspace !== null,
+  });
+
+  const hasWorkspace = activeWorkspace !== null;
   if (!hasWorkspace)
     return <Text c="dimmed">{t("experiments.noWorkspace")}</Text>;
-  if (loading) return <Loader size="sm" />;
-  if (error) return <Text c="red">{t("experiments.error")}</Text>;
+  if (isPending) return <Loader size="sm" />;
+  if (isError) return <Text c="red">{t("experiments.error")}</Text>;
   if (experiments.length === 0)
     return <Text c="dimmed">{t("experiments.empty")}</Text>;
   return (

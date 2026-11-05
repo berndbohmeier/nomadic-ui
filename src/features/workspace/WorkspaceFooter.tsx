@@ -1,27 +1,28 @@
+import { useState } from "react";
 import type { MouseEvent } from "react";
 import { ActionIcon, Group, Menu, Text, UnstyledButton } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { IconFolder, IconFolderPlus, IconX } from "@tabler/icons-react";
+import { useBackend } from "../../app/context";
+import { useWorkspace } from "./useWorkspace";
 import classes from "./WorkspaceFooter.module.css";
 
-export interface WorkspaceFooterProps {
-  activeWorkspace: string | null;
-  history: string[];
-  error: string | null;
-  onSelect: (path: string) => void;
-  onRemove: (path: string) => void;
-  onChoose: () => void;
-}
-
-export function WorkspaceFooter({
-  activeWorkspace,
-  history,
-  error,
-  onSelect,
-  onRemove,
-  onChoose,
-}: WorkspaceFooterProps) {
+export function WorkspaceFooter() {
   const { t } = useTranslation();
+  const backend = useBackend();
+  const { activeWorkspace, history, selectWorkspace, removeFromHistory } =
+    useWorkspace();
+  const [error, setError] = useState<string | null>(null);
+
+  const trySelect = async (path: string) => {
+    const ok = await selectWorkspace(path);
+    setError(ok ? null : t("workspace.invalid", { path }));
+  };
+
+  const pickFolder = async () => {
+    const selected = await backend.workspace.pickFolder();
+    if (selected) await trySelect(selected);
+  };
 
   return (
     <Group h="100%" px="xs" gap="xs" wrap="nowrap">
@@ -51,7 +52,7 @@ export function WorkspaceFooter({
           {history.map((path) => (
             <Menu.Item
               key={path}
-              onClick={() => onSelect(path)}
+              onClick={() => void trySelect(path)}
               bg={
                 path === activeWorkspace
                   ? "var(--mantine-primary-color-light)"
@@ -66,7 +67,7 @@ export function WorkspaceFooter({
                   aria-label={t("workspace.remove")}
                   onClick={(e: MouseEvent) => {
                     e.stopPropagation();
-                    onRemove(path);
+                    removeFromHistory(path);
                   }}
                 >
                   <IconX size={12} />
@@ -81,7 +82,7 @@ export function WorkspaceFooter({
           {history.length > 0 && <Menu.Divider />}
           <Menu.Item
             leftSection={<IconFolderPlus size={14} />}
-            onClick={onChoose}
+            onClick={() => void pickFolder()}
           >
             {t("workspace.choose")}
           </Menu.Item>

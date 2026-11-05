@@ -15,7 +15,6 @@ import {
   Text,
   Tooltip,
 } from "@mantine/core";
-import { useLocalStorage } from "@mantine/hooks";
 import { useTranslation } from "react-i18next";
 import {
   IconFlask,
@@ -26,7 +25,8 @@ import {
 } from "@tabler/icons-react";
 
 import type { Backend } from "../backend/contract";
-import { WorkspaceFooterContainer } from "../features/workspace/WorkspaceFooterContainer";
+import { WorkspaceFooter } from "../features/workspace/WorkspaceFooter";
+import { useStorage } from "../storage/useStorage";
 
 const NAV_ITEMS = [
   { to: "/", labelKey: "nav.start", icon: IconHome2 },
@@ -39,7 +39,7 @@ const COLLAPSED_WIDTH = 64;
 
 function RootLayout() {
   const { t } = useTranslation();
-  const [collapsed, setCollapsed] = useLocalStorage({
+  const [collapsed, setCollapsed] = useStorage({
     key: "nomadic-sidebar-collapsed",
     defaultValue: false,
   });
@@ -57,7 +57,7 @@ function RootLayout() {
         withBorder={false}
         bg="var(--mantine-color-default-hover)"
       >
-        <WorkspaceFooterContainer />
+        <WorkspaceFooter />
       </AppShell.Footer>
       <AppShell.Navbar
         p="xs"

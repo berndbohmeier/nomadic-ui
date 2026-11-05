@@ -47,6 +47,11 @@ function resolveLanguage(preference: LanguagePreference) {
   return preference === SYSTEM_LANGUAGE ? detectSystemLanguage() : preference;
 }
 
+export function applyLanguagePreference(preference: LanguagePreference) {
+  const language = resolveLanguage(preference);
+  if (language !== i18n.language) void i18n.changeLanguage(language);
+}
+
 void i18n.use(initReactI18next).init({
   resources,
   lng: resolveLanguage(getLanguagePreference()),
@@ -55,24 +60,12 @@ void i18n.use(initReactI18next).init({
   interpolation: { escapeValue: false },
 });
 
-function applyLanguagePreference() {
-  const language = resolveLanguage(getLanguagePreference());
-  if (language !== i18n.language) void i18n.changeLanguage(language);
-}
-
-// Re-apply on OS language changes, on changes from other windows ("storage")
-// and on same-window writes made through Mantine's useLocalStorage.
-window.addEventListener("languagechange", applyLanguagePreference);
+window.addEventListener("languagechange", () =>
+  applyLanguagePreference(getLanguagePreference()),
+);
 window.addEventListener("storage", (event) => {
   if (event.key === null || event.key === LANGUAGE_STORAGE_KEY) {
-    applyLanguagePreference();
-  }
-});
-window.addEventListener("mantine-local-storage", (event) => {
-  if (
-    (event as CustomEvent<{ key: string }>).detail.key === LANGUAGE_STORAGE_KEY
-  ) {
-    applyLanguagePreference();
+    applyLanguagePreference(getLanguagePreference());
   }
 });
 

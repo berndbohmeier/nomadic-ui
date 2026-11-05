@@ -2,7 +2,13 @@ import type { Backend } from "../contract";
 
 export const MOCK_WORKSPACE_PATH = "/mock/workspaces/run-001";
 
-export function createMockBackend(): Backend {
+export interface MockBackendOverrides {
+  workspace?: Partial<Backend["workspace"]>;
+}
+
+export function createMockBackend(
+  overrides: MockBackendOverrides = {},
+): Backend {
   const validPaths = new Set([MOCK_WORKSPACE_PATH]);
   return {
     workspace: {
@@ -12,6 +18,7 @@ export function createMockBackend(): Backend {
         Promise.resolve(
           validPaths.has(path) ? ["experiment-001", "experiment-002"] : [],
         ),
+      ...overrides.workspace,
     },
   };
 }
