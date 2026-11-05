@@ -1,5 +1,6 @@
 mod metadata;
 mod read_mapping;
+mod region_coverage;
 
 #[derive(serde::Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -109,6 +110,15 @@ async fn load_read_mapping(path: String) -> Result<Vec<read_mapping::ReadMapping
 }
 
 #[tauri::command]
+async fn load_region_coverage(
+    path: String,
+) -> Result<Vec<region_coverage::RegionCoverageRow>, String> {
+    tauri::async_runtime::spawn_blocking(move || region_coverage::load(std::path::Path::new(&path)))
+        .await
+        .map_err(|error| format!("Region coverage task failed: {error}"))?
+}
+
+#[tauri::command]
 async fn load_metadata(path: String) -> Result<Vec<metadata::BarcodeMetadata>, String> {
     tauri::async_runtime::spawn_blocking(move || metadata::load(std::path::Path::new(&path)))
         .await
@@ -172,6 +182,7 @@ pub fn run() {
             list_experiments,
             load_experiment,
             load_read_mapping,
+            load_region_coverage,
             load_metadata
         ])
         .run(tauri::generate_context!())

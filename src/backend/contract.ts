@@ -42,6 +42,21 @@ export interface ReadMappingCounts {
 /** Read counts combined with sample metadata (done in the UI). */
 export type ReadMappingDatum = ReadMappingCounts & BarcodeMetadata;
 
+/** One row of `summary.region_coverage.csv`. */
+export interface RegionCoverageRow {
+  barcode: string;
+  chrom: string;
+  start: number;
+  length: number;
+  end: number;
+  mean_cov: number;
+  name: string;
+  cov_gr100_per: number;
+  total_cov: number;
+  cov_gr100: number;
+  n_reads: number;
+}
+
 export interface Backend {
   experiments: {
     /** Loads an experiment from its full folder path (any location). */
@@ -50,6 +65,8 @@ export interface Backend {
     openInNewWindow(path: string, title: string): Promise<void>;
     /** Rows of the read mapping file only; no sample metadata. */
     loadReadMapping(path: string): Promise<ReadMappingCounts[]>;
+    /** Amplicon coverage rows; unclassified rows are excluded. */
+    loadRegionCoverage(path: string): Promise<RegionCoverageRow[]>;
     /** Samples of the experiment's metadata CSV, in file order. */
     loadMetadata(path: string): Promise<BarcodeMetadata[]>;
   };

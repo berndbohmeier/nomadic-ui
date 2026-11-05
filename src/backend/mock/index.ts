@@ -1,5 +1,6 @@
 import type { Backend } from "../contract";
 import { metadataData, readMappingCountsData } from "./read-mapping";
+import { regionCoverageData } from "./region-coverage";
 
 export const MOCK_WORKSPACE_PATH = "/mock/workspaces/run-001";
 
@@ -47,6 +48,8 @@ export function createMockBackend(
       },
       loadReadMapping: () =>
         Promise.resolve(readMappingCountsData.map((row) => ({ ...row }))),
+      loadRegionCoverage: () =>
+        Promise.resolve(regionCoverageData.map((row) => ({ ...row }))),
       loadMetadata: () =>
         Promise.resolve(metadataData.map((row) => ({ ...row }))),
       ...overrides.experiments,

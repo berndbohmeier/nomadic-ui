@@ -6,6 +6,7 @@ import type {
   BarcodeMetadata,
   ExperimentInfo,
   ReadMappingCounts,
+  RegionCoverageRow,
 } from "../contract";
 
 interface WorkspaceInfo {
@@ -37,6 +38,9 @@ export function createTauriBackend(): Backend {
       },
       loadReadMapping(path) {
         return invoke<ReadMappingCounts[]>("load_read_mapping", { path });
+      },
+      loadRegionCoverage(path) {
+        return invoke<RegionCoverageRow[]>("load_region_coverage", { path });
       },
       loadMetadata(path) {
         return invoke<BarcodeMetadata[]>("load_metadata", { path });
