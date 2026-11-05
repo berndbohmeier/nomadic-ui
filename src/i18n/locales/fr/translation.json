@@ -83,7 +83,9 @@
     "title": "Expériences",
     "view": {
       "back": "← Retour aux expériences",
-      "error": "Impossible de charger cette expérience."
+      "error": "Impossible de charger cette expérience.",
+      "openInNewWindow": "Ouvrir l’expérience dans une nouvelle fenêtre",
+      "openInNewWindowError": "Impossible d’ouvrir cette expérience dans une nouvelle fenêtre."
     }
   },
   "nav": {

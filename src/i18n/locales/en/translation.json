@@ -82,7 +82,9 @@
     "title": "Experiments",
     "view": {
       "back": "← Back to experiments",
-      "error": "Could not load this experiment."
+      "error": "Could not load this experiment.",
+      "openInNewWindow": "Open experiment in a new window",
+      "openInNewWindowError": "Could not open this experiment in a new window."
     }
   },
   "nav": {

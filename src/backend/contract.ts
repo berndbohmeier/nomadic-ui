@@ -46,6 +46,8 @@ export interface Backend {
   experiments: {
     /** Loads an experiment from its full folder path (any location). */
     load(path: string): Promise<ExperimentInfo>;
+    /** Opens the experiment in a new application window. */
+    openInNewWindow(path: string, title: string): Promise<void>;
     /** Rows of the read mapping file only; no sample metadata. */
     loadReadMapping(path: string): Promise<ReadMappingCounts[]>;
     /** Samples of the experiment's metadata CSV, in file order. */

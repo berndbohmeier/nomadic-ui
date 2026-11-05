@@ -37,6 +37,14 @@ export function createMockBackend(
           },
           files: MOCK_EXPERIMENT_FILES,
         }),
+      openInNewWindow: (path) => {
+        const url = new URL("/experiment-window", window.location.origin);
+        url.searchParams.set("path", path);
+        if (!window.open(url, "_blank")) {
+          throw new Error("The experiment window was blocked by the browser.");
+        }
+        return Promise.resolve();
+      },
       loadReadMapping: () =>
         Promise.resolve(readMappingCountsData.map((row) => ({ ...row }))),
       loadMetadata: () =>

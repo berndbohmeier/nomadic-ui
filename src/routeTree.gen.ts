@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ExperimentRouteImport } from './routes/experiment'
+import { Route as ExperimentWindowRouteImport } from './routes/experiment-window'
 import { Route as ExperimentsRouteImport } from './routes/experiments'
 import { Route as SettingsRouteImport } from './routes/settings'
 
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 const ExperimentRoute = ExperimentRouteImport.update({
   id: '/experiment',
   path: '/experiment',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExperimentWindowRoute = ExperimentWindowRouteImport.update({
+  id: '/experiment-window',
+  path: '/experiment-window',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExperimentsRoute = ExperimentsRouteImport.update({
@@ -38,12 +44,14 @@ const SettingsRoute = SettingsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/experiment': typeof ExperimentRoute
+  '/experiment-window': typeof ExperimentWindowRoute
   '/experiments': typeof ExperimentsRoute
   '/settings': typeof SettingsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/experiment': typeof ExperimentRoute
+  '/experiment-window': typeof ExperimentWindowRoute
   '/experiments': typeof ExperimentsRoute
   '/settings': typeof SettingsRoute
 }
@@ -51,20 +59,29 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/experiment': typeof ExperimentRoute
+  '/experiment-window': typeof ExperimentWindowRoute
   '/experiments': typeof ExperimentsRoute
   '/settings': typeof SettingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/experiment' | '/experiments' | '/settings'
+  fullPaths:
+    '/' | '/experiment' | '/experiment-window' | '/experiments' | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/experiment' | '/experiments' | '/settings'
-  id: '__root__' | '/' | '/experiment' | '/experiments' | '/settings'
+  to: '/' | '/experiment' | '/experiment-window' | '/experiments' | '/settings'
+  id:
+    | '__root__'
+    | '/'
+    | '/experiment'
+    | '/experiment-window'
+    | '/experiments'
+    | '/settings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ExperimentRoute: typeof ExperimentRoute
+  ExperimentWindowRoute: typeof ExperimentWindowRoute
   ExperimentsRoute: typeof ExperimentsRoute
   SettingsRoute: typeof SettingsRoute
 }
@@ -83,6 +100,13 @@ declare module '@tanstack/react-router' {
       path: '/experiment'
       fullPath: '/experiment'
       preLoaderRoute: typeof ExperimentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/experiment-window': {
+      id: '/experiment-window'
+      path: '/experiment-window'
+      fullPath: '/experiment-window'
+      preLoaderRoute: typeof ExperimentWindowRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/experiments': {
@@ -105,6 +129,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExperimentRoute: ExperimentRoute,
+  ExperimentWindowRoute: ExperimentWindowRoute,
   ExperimentsRoute: ExperimentsRoute,
   SettingsRoute: SettingsRoute,
 }

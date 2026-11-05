@@ -82,7 +82,9 @@
     "title": "Experimente",
     "view": {
       "back": "← Zurück zu den Experimenten",
-      "error": "Dieses Experiment konnte nicht geladen werden."
+      "error": "Dieses Experiment konnte nicht geladen werden.",
+      "openInNewWindow": "Experiment in neuem Fenster öffnen",
+      "openInNewWindowError": "Dieses Experiment konnte nicht in einem neuen Fenster geöffnet werden."
     }
   },
   "nav": {

@@ -1,10 +1,19 @@
-import { Badge, Card, Group, Loader, SimpleGrid, Text } from "@mantine/core";
+import {
+  Badge,
+  Card,
+  Group,
+  Loader,
+  SimpleGrid,
+  Text,
+  UnstyledButton,
+} from "@mantine/core";
 import { IconFlask } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useBackend } from "../../app/context";
 import { useWorkspace } from "../workspace/useWorkspace";
 import { joinPath } from "./joinPath";
+import { OpenExperimentWindowButton } from "./OpenExperimentWindowButton";
 import { parseExperimentName } from "./parseExperimentName";
 
 interface ExperimentListProps {
@@ -36,23 +45,29 @@ export function ExperimentList({ onOpen }: ExperimentListProps) {
   return (
     <SimpleGrid cols={{ base: 1, sm: 2, lg: 3, xl: 4 }}>
       {experiments.map(parseExperimentName).map(({ id, date, label }) => (
-        <Card
-          key={id}
-          withBorder
-          padding="md"
-          radius="md"
-          title={id}
-          component="button"
-          type="button"
-          ta="left"
-          style={{ cursor: onOpen ? "pointer" : undefined }}
-          onClick={() => onOpen?.(joinPath(activeWorkspace, "results", id))}
-        >
+        <Card key={id} withBorder padding="md" radius="md" title={id}>
           <Group gap="xs" wrap="nowrap" align="flex-start">
-            <IconFlask size={20} />
-            <Text fw={500} lineClamp={2} style={{ wordBreak: "break-word" }}>
-              {label}
-            </Text>
+            <UnstyledButton
+              type="button"
+              disabled={!onOpen}
+              onClick={() => onOpen?.(joinPath(activeWorkspace, "results", id))}
+              style={{ flex: 1, minWidth: 0, textAlign: "left" }}
+            >
+              <Group gap="xs" wrap="nowrap" align="flex-start">
+                <IconFlask size={20} />
+                <Text
+                  fw={500}
+                  lineClamp={2}
+                  style={{ wordBreak: "break-word" }}
+                >
+                  {label}
+                </Text>
+              </Group>
+            </UnstyledButton>
+            <OpenExperimentWindowButton
+              path={joinPath(activeWorkspace, "results", id)}
+              title={id}
+            />
           </Group>
           {date && (
             <Badge mt="sm" variant="light">

@@ -2,6 +2,7 @@ import {
   createRootRouteWithContext,
   Link,
   Outlet,
+  useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -134,15 +135,25 @@ function RootLayout() {
   );
 }
 
-export const Route = createRootRouteWithContext<{
-  queryClient: QueryClient;
-  backend: Backend;
-}>()({
-  component: () => (
+function RootComponent() {
+  const pathname = useRouterState({
+    select: (state) => state.location.pathname,
+  });
+
+  if (pathname === "/experiment-window") return <Outlet />;
+
+  return (
     <>
       <RootLayout />
       <TanStackRouterDevtools position="top-right" />
       <ReactQueryDevtools buttonPosition="bottom-right" />
     </>
-  ),
+  );
+}
+
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient;
+  backend: Backend;
+}>()({
+  component: RootComponent,
 });
