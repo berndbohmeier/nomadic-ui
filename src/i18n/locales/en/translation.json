@@ -6,16 +6,15 @@
       "cancel": "Cancel",
       "count": "{{selected}} of {{total}} selected",
       "drag": "Reorder {{barcode}}",
-      "error": "Could not load the barcodes.",
-      "link_one": "{{count}} Barcode",
-      "link_other": "{{count}} Barcodes",
+      "error": "Could not load the samples.",
+      "link": "{{selected}}/{{total}} Samples",
       "resetOrder": "Reset order",
       "sampleName": "Sample name",
       "sampleType": "Sample type",
       "select": "Select {{barcode}}",
       "selectAll": "Select all",
       "selectNone": "Select none",
-      "title": "Barcodes",
+      "title": "Samples",
       "typeSample": "Sample"
     },
     "empty": "No experiments found in this workspace.",
@@ -146,7 +145,6 @@
       "wsafLegend": "WSAF color scale"
     },
     "view": {
-      "back": "← Back to experiments",
       "error": "Could not load this experiment.",
       "openInNewWindow": "Open experiment in a new window",
       "openInNewWindowError": "Could not open this experiment in a new window."

@@ -15,6 +15,7 @@ import {
 } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import type { ReadMappingDatum } from "../../../../backend/contract";
+import { measureSampleNameAxisHeight } from "../sampleNameAxisHeight";
 import { ReadTypeBreakdown } from "./ReadTypeBreakdown";
 import { summarizeReadMapping } from "./summarizeReadMapping";
 import "@mantine/charts/styles.css";
@@ -37,9 +38,9 @@ export function ReadMappingChart({
   );
   const selected =
     barcodes.find((row) => row.barcode === selectedBarcode) ?? barcodes[0];
-  // Reserve space for full sample names while keeping the plot height constant.
-  const axisHeight =
-    Math.max(120, ...barcodes.map((row) => row.sampleId.length * 8)) + 62;
+  const axisHeight = measureSampleNameAxisHeight(
+    barcodes.map((row) => row.sampleId),
+  );
   const format = (value: number) => value.toLocaleString(i18n.language);
   const formatShare = (value: number | null) =>
     value === null

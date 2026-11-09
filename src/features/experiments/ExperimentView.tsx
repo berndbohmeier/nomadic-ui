@@ -1,5 +1,4 @@
 import { Box, Group, Tabs, Text, Title } from "@mantine/core";
-import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import type { ExperimentInfo } from "../../backend/contract";
 import { BarcodesLink } from "./barcodes/BarcodesLink";
@@ -10,23 +9,21 @@ import { SettingsPanel } from "./SettingsPanel";
 
 interface ExperimentViewProps {
   experiment: ExperimentInfo;
-  /** Rendered at the top of the pinned header, e.g. a back link. */
-  headerTop?: ReactNode;
 }
 
-export function ExperimentView({ experiment, headerTop }: ExperimentViewProps) {
+export function ExperimentView({ experiment }: ExperimentViewProps) {
   return (
     // Keyed so the barcode selection is never shared between experiments.
     <BarcodeSelectionProvider
       key={experiment.path}
       experimentPath={experiment.path}
     >
-      <ExperimentContent experiment={experiment} headerTop={headerTop} />
+      <ExperimentContent experiment={experiment} />
     </BarcodeSelectionProvider>
   );
 }
 
-function ExperimentContent({ experiment, headerTop }: ExperimentViewProps) {
+function ExperimentContent({ experiment }: ExperimentViewProps) {
   const { t } = useTranslation();
   const panels = getAvailablePanels(experiment);
 
@@ -39,19 +36,22 @@ function ExperimentContent({ experiment, headerTop }: ExperimentViewProps) {
         bg="var(--mantine-color-body)"
         style={{ zIndex: 10 }}
       >
-        {headerTop}
-        <Group gap="xs" wrap="nowrap">
-          <Title order={2}>{experiment.name}</Title>
-          <OpenExperimentWindowButton
-            path={experiment.path}
-            title={experiment.name}
-          />
+        <Group justify="space-between" gap="xs" wrap="nowrap" align="start">
+          <Group gap="xs" wrap="nowrap" style={{ minWidth: 0 }}>
+            <Title order={2} style={{ overflowWrap: "anywhere" }}>
+              {experiment.name}
+            </Title>
+            <OpenExperimentWindowButton
+              path={experiment.path}
+              title={experiment.name}
+            />
+          </Group>
+          <BarcodesLink />
         </Group>
         <Text c="dimmed" size="sm" style={{ wordBreak: "break-all" }}>
           {experiment.path}
         </Text>
-        <BarcodesLink />
-        <Tabs.List mt="md">
+        <Tabs.List mt="xs">
           {panels.map(({ panel }) => (
             <Tabs.Tab key={panel.id} value={panel.id}>
               {panel.label(t)}

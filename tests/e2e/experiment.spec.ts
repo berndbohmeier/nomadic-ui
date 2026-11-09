@@ -110,13 +110,41 @@ test("filters read mapping with the barcode selection and resets per experiment"
   await page.getByRole("link", { name: "Experiments" }).click();
   await page.getByRole("button", { name: "experiment-001" }).click();
 
-  await page.getByRole("button", { name: "48 Barcodes" }).click();
+  const heading = page.getByRole("heading", { name: "experiment-001" });
+  const samplesLink = page.getByRole("button", { name: "48/48 Samples" });
+  await expect(samplesLink).toBeVisible();
+  const headingBox = await heading.boundingBox();
+  const samplesBox = await samplesLink.boundingBox();
+  expect(headingBox).not.toBeNull();
+  expect(samplesBox).not.toBeNull();
+  if (headingBox === null || samplesBox === null) {
+    throw new Error("Experiment heading or samples link is not visible");
+  }
+  expect(samplesBox.x).toBeGreaterThan(headingBox.x + headingBox.width);
+  expect(samplesBox.y).toBeGreaterThanOrEqual(headingBox.y);
+  expect(samplesBox.y).toBeLessThan(headingBox.y + headingBox.height);
+  await samplesLink.click();
   const dialog = page.getByRole("dialog");
+  await expect(dialog).toHaveAccessibleName("Samples");
   await dialog.getByRole("button", { name: "Select none" }).click();
+  await dialog.getByRole("button", { name: "Cancel" }).click();
+  await expect(
+    page.getByRole("button", { name: "48/48 Samples" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "48/48 Samples" }).click();
+  await dialog.getByRole("button", { name: "Select none" }).click();
+  await dialog.getByRole("button", { name: "Apply" }).click();
+  await expect(
+    page.getByRole("button", { name: "0/48 Samples" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "0/48 Samples" }).click();
   await dialog.getByRole("checkbox", { name: "Select barcode02" }).check();
   await dialog.getByRole("button", { name: "Apply" }).click();
 
   await expect(dialog).toBeHidden();
+  await expect(
+    page.getByRole("button", { name: "1/48 Samples" }),
+  ).toBeVisible();
   await expect(
     page.getByRole("button", { name: "Select Sample_02 (barcode02)" }),
   ).toBeVisible();
@@ -142,6 +170,9 @@ test("filters read mapping with the barcode selection and resets per experiment"
 
   await page.getByRole("link", { name: "Experiments", exact: true }).click();
   await page.getByRole("button", { name: "experiment-002" }).click();
+  await expect(
+    page.getByRole("button", { name: "48/48 Samples" }),
+  ).toBeVisible();
   await expect(
     page.getByRole("button", { name: /Select .*\(barcode47\)/ }),
   ).toBeVisible();

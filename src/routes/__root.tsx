@@ -145,7 +145,7 @@ function RootComponent() {
   return (
     <>
       <RootLayout />
-      <TanStackRouterDevtools position="top-right" />
+      <TanStackRouterDevtools position="top-left" />
       <ReactQueryDevtools buttonPosition="bottom-right" />
     </>
   );

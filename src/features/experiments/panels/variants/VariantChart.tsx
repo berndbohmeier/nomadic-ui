@@ -9,6 +9,7 @@ import {
   type DisplayStatus,
 } from "./variantAppearance";
 import { wsafColor } from "./wsafScale";
+import { measureSampleNameAxisHeight } from "../sampleNameAxisHeight";
 
 export type VariantView = "aaCall" | "wsaf";
 
@@ -137,8 +138,9 @@ export function VariantChart({
     return (value: number | null) =>
       `${t("experiments.variants.wsaf")}: ${value === null ? statusLabels.noCall : formatter.format(value)}`;
   }, [i18n.language, statusLabels.noCall, t]);
-  const axisHeight =
-    Math.max(100, ...samples.map((sample) => sample.sampleId.length * 8)) + 62;
+  const axisHeight = measureSampleNameAxisHeight(
+    samples.map((sample) => sample.sampleId),
+  );
   const axisY = variants.length * 24 + 20;
   const width = 130 + samples.length * 28;
   return (

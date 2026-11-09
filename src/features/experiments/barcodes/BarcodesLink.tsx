@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { BarcodesModal } from "./BarcodesModal";
 import { useBarcodeSelection } from "./BarcodeSelection";
 
-/** "N Barcodes" link that opens the selection/ordering modal. */
 export function BarcodesLink() {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
@@ -25,9 +24,13 @@ export function BarcodesLink() {
         component="button"
         type="button"
         size="sm"
+        style={{ flexShrink: 0 }}
         onClick={() => setOpened(true)}
       >
-        {t("experiments.barcodes.link", { count: metadata.length })}
+        {t("experiments.barcodes.link", {
+          selected: selected.length,
+          total: metadata.length,
+        })}
       </Anchor>
       <BarcodesModal
         opened={opened}

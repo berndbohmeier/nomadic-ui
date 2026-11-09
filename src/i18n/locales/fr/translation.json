@@ -6,17 +6,15 @@
       "cancel": "Annuler",
       "count": "{{selected}} sur {{total}} sélectionnés",
       "drag": "Réorganiser {{barcode}}",
-      "error": "Impossible de charger les codes-barres.",
-      "link_one": "{{count}} code-barres",
-      "link_many": "",
-      "link_other": "{{count}} codes-barres",
+      "error": "Impossible de charger les échantillons.",
+      "link": "{{selected}}/{{total}} échantillons",
       "resetOrder": "Réinitialiser l'ordre",
       "sampleName": "Nom de l'échantillon",
       "sampleType": "Type d'échantillon",
       "select": "Sélectionner {{barcode}}",
       "selectAll": "Tout sélectionner",
       "selectNone": "Tout désélectionner",
-      "title": "Codes-barres",
+      "title": "Échantillons",
       "typeSample": "Échantillon"
     },
     "empty": "Aucune expérience trouvée dans cet espace de travail.",
@@ -147,7 +145,6 @@
       "wsafLegend": "Échelle de couleurs WSAF"
     },
     "view": {
-      "back": "← Retour aux expériences",
       "error": "Impossible de charger cette expérience.",
       "openInNewWindow": "Ouvrir l’expérience dans une nouvelle fenêtre",
       "openInNewWindowError": "Impossible d’ouvrir cette expérience dans une nouvelle fenêtre."

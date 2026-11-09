@@ -19,6 +19,7 @@ import type {
   BarcodeMetadata,
   RegionCoverageRow,
 } from "../../../../backend/contract";
+import { measureSampleNameAxisHeight } from "../sampleNameAxisHeight";
 import { summarizeRegionCoverage } from "./summarizeRegionCoverage";
 import "@mantine/charts/styles.css";
 
@@ -108,8 +109,9 @@ export function RegionCoverageChart({
         },
       ]
     : [];
-  const axisHeight =
-    Math.max(120, ...barcodes.map((row) => row.sampleId.length * 8)) + 62;
+  const axisHeight = measureSampleNameAxisHeight(
+    barcodes.map((row) => row.sampleId),
+  );
 
   return (
     <Paper withBorder radius="md" p="md">
