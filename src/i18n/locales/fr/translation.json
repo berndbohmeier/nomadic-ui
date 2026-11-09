@@ -24,7 +24,8 @@
       "aaChange": "Changements d'AA",
       "placeholder": "Espace réservé pour {{file}}",
       "readMapping": "Mapping des reads",
-      "regionCoverage": "Couverture des régions"
+      "regionCoverage": "Couverture des régions",
+      "sequencingOverview": "Vue d'ensemble du séquençage"
     },
     "readMapping": {
       "aggregateComposition": "Répartition des types de reads sur les codes-barres démultiplexés",
@@ -96,6 +97,43 @@
       "showAmplicon": "Afficher {{amplicon}}",
       "staleData": "Les dernières données chargées sont affichées. Nouvelle tentative automatique.",
       "totalReads": "{{reads}} reads sur l’ensemble des amplicons"
+    },
+    "sequencingOverview": {
+      "amplicon": "Amplicon",
+      "controlCount": "{{value}} / {{total}}",
+      "controlCriteria": "Contrôle négatif : contaminé si une couverture moyenne est > {{negative}}. Contrôle positif : réussi si > {{fraction}}% des amplicons disponibles ont une couverture moyenne > {{positive}}.",
+      "controls": "Contrôles",
+      "coveredPercent": "Bases avec une couverture >100",
+      "error": "Impossible de charger la vue d'ensemble du séquençage.",
+      "loading": "Chargement de la vue d'ensemble du séquençage",
+      "lowMean": "La couverture moyenne ne dépasse pas le seuil",
+      "lowPercent": "Les bases couvertes ne dépassent pas le seuil",
+      "meanCoverage": "Couverture moyenne",
+      "negativeCaveat": "Un contrôle négatif réussi indique seulement l'absence de contamination au-dessus du seuil ; il ne confirme pas que le contrôle a été traité.",
+      "negativeControl": "Contrôle négatif",
+      "negativePassedControls": "Contrôles négatifs réussis",
+      "noControls": "Aucun contrôle sélectionné.",
+      "noNegativeControls": "Aucun contrôle négatif sélectionné",
+      "noPositiveControls": "Aucun contrôle positif sélectionné",
+      "noRows": "Aucune ligne de couverture disponible pour ce code-barres.",
+      "noSamples": "Aucun échantillon sélectionné.",
+      "positiveControl": "Contrôle positif",
+      "positiveCount": "{{passed}} amplicons disponibles sur {{total}} ont réussi",
+      "positivePassedControls": "Contrôles positifs réussis",
+      "presentRowsOnly": "Seuls les amplicons présents dans le fichier de couverture sont évalués ; les amplicons manquants ne sont pas comptés.",
+      "reason": "Incomplet car",
+      "sampleCount": "{{complete}} amplicons disponibles sur {{total}} terminés",
+      "sampleCriteria": "Terminé : couverture moyenne > {{mean}} et > {{percent}}% des bases avec une couverture >100. Amplicon sans données : couverture moyenne < {{noData}}. Échantillon sans données : > {{noDataPercent}}% des amplicons disponibles sont sans données.",
+      "samples": "Échantillons",
+      "sampleStatusChart": "Statut global des échantillons",
+      "status": {
+        "complete": "Terminé",
+        "contaminated": "Contaminé",
+        "gathering": "Collecte des données...",
+        "noData": "Aucune donnée",
+        "passed": "Réussi",
+        "unavailable": "Indisponible"
+      }
     },
     "settings": {
       "caller": "Caller",

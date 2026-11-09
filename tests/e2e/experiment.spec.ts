@@ -12,13 +12,21 @@ test("opens an experiment and switches panel tabs", async ({ page }) => {
     page.getByRole("heading", { name: "experiment-001", level: 2 }),
   ).toBeVisible();
   await expect(page.getByRole("tab")).toHaveText([
+    "Sequencing overview",
     "Read mapping",
     "Region coverage",
     "AA changes",
     "Settings",
   ]);
 
+  await expect(
+    page.getByRole("tab", { name: "Sequencing overview" }),
+  ).toHaveAttribute("aria-selected", "true");
+  await expect(
+    page.getByRole("heading", { name: "Controls", exact: true }),
+  ).toBeVisible();
   // Read mapping is backed by the browser implementation of the native contract.
+  await page.getByRole("tab", { name: "Read mapping" }).click();
   await page.getByRole("button", { name: /NTC_2.*barcode47/ }).click();
   const readMappingDetails = page.getByRole("status");
   await expect(readMappingDetails).toContainText("NTC_2");
@@ -142,6 +150,17 @@ test("filters read mapping with the barcode selection and resets per experiment"
   await dialog.getByRole("button", { name: "Apply" }).click();
 
   await expect(dialog).toBeHidden();
+  await page
+    .getByRole("region", { name: "Samples", exact: true })
+    .locator(":scope > details > summary", { hasText: "Gathering data... (1)" })
+    .click();
+  await expect(
+    page.locator("span").filter({ hasText: /^Sample_02 · barcode02$/ }),
+  ).toBeVisible();
+  await expect(page.getByText("Gathering data...: 1")).toBeVisible();
+  await expect(page.getByText("Complete: 0")).toBeVisible();
+  await expect(page.getByText("No controls selected.")).toBeVisible();
+  await page.getByRole("tab", { name: "Read mapping" }).click();
   await expect(
     page.getByRole("button", { name: "1/48 Samples" }),
   ).toBeVisible();
@@ -173,7 +192,105 @@ test("filters read mapping with the barcode selection and resets per experiment"
   await expect(
     page.getByRole("button", { name: "48/48 Samples" }),
   ).toBeVisible();
+  await page.getByRole("tab", { name: "Read mapping" }).click();
   await expect(
     page.getByRole("button", { name: /Select .*\(barcode47\)/ }),
   ).toBeVisible();
+});
+
+test("shows current overview metrics and control details", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Change workspace" }).click();
+  await page.getByRole("menuitem", { name: "Choose folder…" }).click();
+  await page.getByRole("link", { name: "Experiments" }).click();
+  await page.getByRole("button", { name: "experiment-001" }).click();
+  await expect(page.getByText(/Only amplicons present/)).toBeVisible();
+  const samples = page.getByRole("region", { name: "Samples", exact: true });
+  const controls = page.getByRole("region", { name: "Controls", exact: true });
+  await expect(
+    samples.getByRole("heading", { name: "Overall sample statuses" }),
+  ).toBeVisible();
+  await expect(controls.getByText("Positive controls passed")).toBeVisible();
+  await expect(controls.getByText("Negative controls passed")).toBeVisible();
+  await expect(
+    page.locator("span").filter({ hasText: /^Sample_02 · barcode02$/ }),
+  ).toBeHidden();
+  await samples
+    .locator(":scope > details > summary", {
+      hasText: /Gathering data\.\.\. \(\d+\)/,
+    })
+    .click();
+  const sample = samples
+    .locator("details")
+    .filter({
+      has: page.locator("span").filter({ hasText: /^Sample_02 · barcode02$/ }),
+    })
+    .last();
+  await sample.locator(":scope > summary").click();
+  await expect(
+    sample.getByRole("columnheader", { name: "Mean coverage" }).first(),
+  ).toBeVisible();
+  await expect(
+    sample
+      .getByRole("columnheader", { name: "Bases with coverage >100" })
+      .first(),
+  ).toBeVisible();
+  await expect(
+    sample.getByText("Mean coverage does not exceed the threshold").first(),
+  ).toBeVisible();
+  await controls
+    .locator(":scope > details > summary", {
+      hasText: /Gathering data\.\.\. \(\d+\)/,
+    })
+    .click();
+  const control = controls
+    .locator("details")
+    .filter({
+      has: page.getByText("Reference_control · barcode01", { exact: true }),
+    })
+    .last();
+  await control.locator(":scope > summary").click();
+  await expect(
+    control.getByText(/of 10 available amplicons passed/),
+  ).toBeVisible();
+});
+
+test("adapts overview columns and status groups to available space", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Change workspace" }).click();
+  await page.getByRole("menuitem", { name: "Choose folder…" }).click();
+  await page.getByRole("link", { name: "Experiments" }).click();
+  await page.getByRole("button", { name: "experiment-001" }).click();
+  const samples = page.getByRole("region", { name: "Samples", exact: true });
+  const controls = page.getByRole("region", { name: "Controls", exact: true });
+  await expect(samples.locator("details[open]")).toHaveCount(0);
+  await expect(controls.locator("details[open]")).toHaveCount(0);
+  const sampleWide = await samples.boundingBox();
+  const controlWide = await controls.boundingBox();
+  expect(sampleWide).not.toBeNull();
+  expect(controlWide).not.toBeNull();
+  if (!sampleWide || !controlWide) throw new Error("Missing overview sections");
+  expect(controlWide.x).toBeGreaterThan(sampleWide.x + sampleWide.width - 1);
+  expect(Math.abs(controlWide.y - sampleWide.y)).toBeLessThan(1);
+  await expect(controls).toHaveCSS("border-left-style", "solid");
+
+  const group = samples.locator(":scope > details > summary").first();
+  await group.focus();
+  await page.keyboard.press("Enter");
+  await expect(group.locator("..")).toHaveAttribute("open", "");
+  await page.keyboard.press("Enter");
+  await expect(group.locator("..")).not.toHaveAttribute("open", "");
+
+  await page.setViewportSize({ width: 600, height: 900 });
+  const sampleNarrow = await samples.boundingBox();
+  const controlNarrow = await controls.boundingBox();
+  if (!sampleNarrow || !controlNarrow)
+    throw new Error("Missing overview sections");
+  expect(controlNarrow.y).toBeGreaterThanOrEqual(
+    sampleNarrow.y + sampleNarrow.height,
+  );
+  await expect(controls).toHaveCSS("border-top-style", "solid");
 });

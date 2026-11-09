@@ -20,7 +20,12 @@ describe("getAvailablePanels", () => {
         "summary.region_coverage.csv",
         "summary.read_mapping.csv",
       ]),
-    ).toEqual(["readMapping", "regionCoverage", "aaChange"]);
+    ).toEqual([
+      "sequencingOverview",
+      "readMapping",
+      "regionCoverage",
+      "aaChange",
+    ]);
   });
 
   it("returns none when no files exist", () => {
@@ -28,7 +33,10 @@ describe("getAvailablePanels", () => {
   });
 
   it("returns only panels with their file present", () => {
-    expect(ids(["summary.region_coverage.csv"])).toEqual(["regionCoverage"]);
+    expect(ids(["summary.region_coverage.csv"])).toEqual([
+      "sequencingOverview",
+      "regionCoverage",
+    ]);
   });
 
   it("accepts the legacy AA changes file and reports which file matched", () => {

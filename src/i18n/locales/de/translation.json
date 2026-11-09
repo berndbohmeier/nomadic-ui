@@ -24,7 +24,8 @@
       "aaChange": "AA-Änderungen",
       "placeholder": "Platzhalter für {{file}}",
       "readMapping": "Read-Mapping",
-      "regionCoverage": "Regionsabdeckung"
+      "regionCoverage": "Regionsabdeckung",
+      "sequencingOverview": "Sequenzierungsübersicht"
     },
     "readMapping": {
       "aggregateComposition": "Verteilung der Read-Typen über demultiplexierte Barcodes",
@@ -96,6 +97,43 @@
       "showAmplicon": "{{amplicon}} einblenden",
       "staleData": "Die zuletzt geladenen Daten werden angezeigt. Ein neuer Versuch erfolgt automatisch.",
       "totalReads": "{{reads}} Reads über alle Amplicons"
+    },
+    "sequencingOverview": {
+      "amplicon": "Amplikon",
+      "controlCount": "{{value}} / {{total}}",
+      "controlCriteria": "Negativkontrolle: kontaminiert, wenn eine mittlere Abdeckung > {{negative}} ist. Positivkontrolle: bestanden, wenn > {{fraction}}% der vorhandenen Amplikons eine mittlere Abdeckung > {{positive}} haben.",
+      "controls": "Kontrollen",
+      "coveredPercent": "Basen mit Abdeckung >100",
+      "error": "Sequenzierungsübersicht konnte nicht geladen werden.",
+      "loading": "Sequenzierungsübersicht wird geladen",
+      "lowMean": "Mittlere Abdeckung überschreitet den Schwellenwert nicht",
+      "lowPercent": "Abgedeckte Basen überschreiten den Schwellenwert nicht",
+      "meanCoverage": "Mittlere Abdeckung",
+      "negativeCaveat": "Eine bestandene Negativkontrolle zeigt nur, dass keine Kontamination über dem Schwellenwert vorliegt; sie bestätigt nicht die Verarbeitung der Kontrolle.",
+      "negativeControl": "Negativkontrolle",
+      "negativePassedControls": "Bestandene Negativkontrollen",
+      "noControls": "Keine Kontrollen ausgewählt.",
+      "noNegativeControls": "Keine Negativkontrollen ausgewählt",
+      "noPositiveControls": "Keine Positivkontrollen ausgewählt",
+      "noRows": "Für diesen Barcode sind keine Abdeckungszeilen vorhanden.",
+      "noSamples": "Keine Proben ausgewählt.",
+      "positiveControl": "Positivkontrolle",
+      "positiveCount": "{{passed}} von {{total}} vorhandenen Amplikons bestanden",
+      "positivePassedControls": "Bestandene Positivkontrollen",
+      "presentRowsOnly": "Nur in der Abdeckungsdatei vorhandene Amplikons werden ausgewertet; fehlende Amplikons werden nicht gezählt.",
+      "reason": "Unvollständig, weil",
+      "sampleCount": "{{complete}} von {{total}} vorhandenen Amplikons abgeschlossen",
+      "sampleCriteria": "Abgeschlossen: mittlere Abdeckung > {{mean}} und > {{percent}}% der Basen mit Abdeckung >100. Amplikon ohne Daten: mittlere Abdeckung < {{noData}}. Probe ohne Daten: > {{noDataPercent}}% der vorhandenen Amplikons sind ohne Daten.",
+      "samples": "Proben",
+      "sampleStatusChart": "Gesamtstatus der Proben",
+      "status": {
+        "complete": "Abgeschlossen",
+        "contaminated": "Kontaminiert",
+        "gathering": "Daten werden gesammelt...",
+        "noData": "Keine Daten",
+        "passed": "Bestanden",
+        "unavailable": "Nicht verfügbar"
+      }
     },
     "settings": {
       "caller": "Caller",

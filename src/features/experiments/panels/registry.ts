@@ -2,10 +2,12 @@ import type { ExperimentInfo } from "../../../backend/contract";
 import { aaChangePanel } from "./AAChangePanel";
 import { readMappingPanel } from "./ReadMappingPanel";
 import { regionCoveragePanel } from "./RegionCoveragePanel";
+import { sequencingOverviewPanel } from "./SequencingOverviewPanel";
 import type { ExperimentPanel } from "./types";
 
 /** Display order of the tabs. */
 export const EXPERIMENT_PANELS: ExperimentPanel[] = [
+  sequencingOverviewPanel,
   readMappingPanel,
   regionCoveragePanel,
   aaChangePanel,

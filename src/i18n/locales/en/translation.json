@@ -24,7 +24,8 @@
       "aaChange": "AA changes",
       "placeholder": "Placeholder for {{file}}",
       "readMapping": "Read mapping",
-      "regionCoverage": "Region coverage"
+      "regionCoverage": "Region coverage",
+      "sequencingOverview": "Sequencing overview"
     },
     "readMapping": {
       "aggregateComposition": "Read-type composition across demultiplexed barcodes",
@@ -96,6 +97,43 @@
       "showAmplicon": "Show {{amplicon}}",
       "staleData": "Showing the last loaded data. Retrying automatically.",
       "totalReads": "{{reads}} reads across amplicons"
+    },
+    "sequencingOverview": {
+      "amplicon": "Amplicon",
+      "controlCount": "{{value}} / {{total}}",
+      "controlCriteria": "Negative control: contaminated if any mean coverage > {{negative}}. Positive control: passed if > {{fraction}}% of available amplicons have mean coverage > {{positive}}.",
+      "controls": "Controls",
+      "coveredPercent": "Bases with coverage >100",
+      "error": "Could not load sequencing overview.",
+      "loading": "Loading sequencing overview",
+      "lowMean": "Mean coverage does not exceed the threshold",
+      "lowPercent": "Covered bases do not exceed the threshold",
+      "meanCoverage": "Mean coverage",
+      "negativeCaveat": "A passed negative control only indicates no contamination above the threshold; it does not confirm that the control was processed.",
+      "negativeControl": "Negative control",
+      "negativePassedControls": "Negative controls passed",
+      "noControls": "No controls selected.",
+      "noNegativeControls": "No negative controls selected",
+      "noPositiveControls": "No positive controls selected",
+      "noRows": "No coverage rows are available for this barcode.",
+      "noSamples": "No samples selected.",
+      "positiveControl": "Positive control",
+      "positiveCount": "{{passed}} of {{total}} available amplicons passed",
+      "positivePassedControls": "Positive controls passed",
+      "presentRowsOnly": "Only amplicons present in the coverage file are evaluated; missing amplicons are not counted.",
+      "reason": "Incomplete because",
+      "sampleCount": "{{complete}} of {{total}} available amplicons complete",
+      "sampleCriteria": "Complete: mean coverage > {{mean}} and > {{percent}}% of bases have coverage >100. Amplicon No data: mean coverage < {{noData}}. Sample No data: > {{noDataPercent}}% of available amplicons are No data.",
+      "samples": "Samples",
+      "sampleStatusChart": "Overall sample statuses",
+      "status": {
+        "complete": "Complete",
+        "contaminated": "Contaminated",
+        "gathering": "Gathering data...",
+        "noData": "No data",
+        "passed": "Passed",
+        "unavailable": "Unavailable"
+      }
     },
     "settings": {
       "caller": "Caller",
