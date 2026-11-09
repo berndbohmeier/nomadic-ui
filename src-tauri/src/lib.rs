@@ -1,3 +1,4 @@
+mod aa_changes;
 mod metadata;
 mod read_mapping;
 mod region_coverage;
@@ -119,6 +120,18 @@ async fn load_region_coverage(
 }
 
 #[tauri::command]
+async fn load_aa_changes(
+    path: String,
+    file: String,
+) -> Result<Vec<aa_changes::AaChangeRow>, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        aa_changes::load(std::path::Path::new(&path), &file)
+    })
+    .await
+    .map_err(|error| format!("Amino-acid changes task failed: {error}"))?
+}
+
+#[tauri::command]
 async fn load_metadata(path: String) -> Result<Vec<metadata::BarcodeMetadata>, String> {
     tauri::async_runtime::spawn_blocking(move || metadata::load(std::path::Path::new(&path)))
         .await
@@ -153,6 +166,21 @@ mod tests {
     }
 
     #[test]
+    fn amino_acid_command_loads_and_serializes_calls() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../test_data/nomadic/results/2025_07_28_new_dbs");
+        let rows = tauri::async_runtime::block_on(load_aa_changes(
+            root.to_string_lossy().into_owned(),
+            "summary.aa_changes.csv".to_owned(),
+        ))
+        .unwrap();
+        let json = serde_json::to_value(&rows[0]).unwrap();
+        assert_eq!(json["aa_call"], "wt");
+        assert_eq!(json["aa_depth"], 390);
+        assert_eq!(json["aa_wsaf"], 0.0);
+    }
+
+    #[test]
     fn metadata_command_loads_test_experiment() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("../test_data/nomadic/results/2025_07_28_new_dbs");
@@ -183,6 +211,7 @@ pub fn run() {
             load_experiment,
             load_read_mapping,
             load_region_coverage,
+            load_aa_changes,
             load_metadata
         ])
         .run(tauri::generate_context!())

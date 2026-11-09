@@ -3,6 +3,7 @@ import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { open } from "@tauri-apps/plugin-dialog";
 import type {
   Backend,
+  AaChangeRow,
   BarcodeMetadata,
   ExperimentInfo,
   ReadMappingCounts,
@@ -41,6 +42,9 @@ export function createTauriBackend(): Backend {
       },
       loadRegionCoverage(path) {
         return invoke<RegionCoverageRow[]>("load_region_coverage", { path });
+      },
+      loadAaChanges(path, file) {
+        return invoke<AaChangeRow[]>("load_aa_changes", { path, file });
       },
       loadMetadata(path) {
         return invoke<BarcodeMetadata[]>("load_metadata", { path });

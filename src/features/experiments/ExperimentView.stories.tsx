@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
 import { ExperimentView } from "./ExperimentView";
 
 const base = {
@@ -31,6 +32,30 @@ export const AllPanels: Story = {
         "summary.aa_changes.csv",
       ],
     },
+  },
+};
+export const SlowAminoAcidLoading: Story = {
+  args: {
+    experiment: {
+      ...base,
+      files: ["summary.read_mapping.csv", "summary.aa_changes.csv"],
+    },
+  },
+  parameters: {
+    testProviders: {
+      backend: {
+        experiments: { loadAaChanges: () => new Promise(() => {}) },
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const tab = canvas.getByRole("tab", { name: "AA changes" });
+    await userEvent.click(tab);
+    await expect(tab).toHaveAttribute("aria-selected", "true");
+    await expect(
+      await canvas.findByRole("status", { name: "Loading amino-acid changes" }),
+    ).toBeVisible();
   },
 };
 export const SomePanels: Story = {

@@ -57,6 +57,25 @@ export interface RegionCoverageRow {
   n_reads: number;
 }
 
+export const aaCallStatuses = [
+  "failed",
+  "unphased",
+  "absent",
+  "wt",
+  "mixed",
+  "mutant",
+] as const;
+export type AaCallStatus = (typeof aaCallStatuses)[number];
+
+export interface AaChangeRow {
+  barcode: string;
+  gene: string;
+  aa_change: string;
+  aa_call: AaCallStatus;
+  aa_depth: number | null;
+  aa_wsaf: number | null;
+}
+
 export interface Backend {
   experiments: {
     /** Loads an experiment from its full folder path (any location). */
@@ -67,6 +86,8 @@ export interface Backend {
     loadReadMapping(path: string): Promise<ReadMappingCounts[]>;
     /** Amplicon coverage rows; unclassified rows are excluded. */
     loadRegionCoverage(path: string): Promise<RegionCoverageRow[]>;
+    /** Normalized calls from the selected current or legacy amino-acid file. */
+    loadAaChanges(path: string, file: string): Promise<AaChangeRow[]>;
     /** Samples of the experiment's metadata CSV, in file order. */
     loadMetadata(path: string): Promise<BarcodeMetadata[]>;
   };

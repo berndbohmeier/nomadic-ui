@@ -87,7 +87,15 @@ test("opens an experiment and switches panel tabs", async ({ page }) => {
   );
 
   await page.getByRole("tab", { name: "AA changes" }).click();
-  await expect(page.getByText("summary.aa_changes.csv")).toBeVisible();
+  await expect(page.getByText("4 variants · 48 samples")).toBeVisible();
+  await expect(page.getByText("Positive control")).toBeVisible();
+  await expect(page.getByText("PC", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("NC", { exact: true }).first()).toBeVisible();
+  await page.getByRole("button", { name: "Select NTC_2 · barcode47" }).click();
+  await expect(page.getByText("Negative control")).toBeVisible();
+  await expect(page.getByRole("button", { name: /unclassified/i })).toHaveCount(
+    0,
+  );
 
   await page.getByRole("tab", { name: "Settings" }).click();
   await expect(page.getByText("Pf3D7")).toBeVisible();
@@ -122,6 +130,14 @@ test("filters read mapping with the barcode selection and resets per experiment"
   ).toBeVisible();
   await expect(
     page.getByRole("button", { name: /Select .*\(barcode47\)/ }),
+  ).toHaveCount(0);
+
+  await page.getByRole("tab", { name: "AA changes" }).click();
+  await expect(
+    page.getByRole("button", { name: "Select Sample_02 · barcode02" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Select .*barcode47/ }),
   ).toHaveCount(0);
 
   await page.getByRole("link", { name: "Experiments", exact: true }).click();

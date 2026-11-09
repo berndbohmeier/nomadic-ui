@@ -1,6 +1,7 @@
 import type { Backend } from "../contract";
 import { metadataData, readMappingCountsData } from "./read-mapping";
 import { regionCoverageData } from "./region-coverage";
+import { aaChangesData } from "./aa-changes";
 
 export const MOCK_WORKSPACE_PATH = "/mock/workspaces/run-001";
 
@@ -50,6 +51,17 @@ export function createMockBackend(
         Promise.resolve(readMappingCountsData.map((row) => ({ ...row }))),
       loadRegionCoverage: () =>
         Promise.resolve(regionCoverageData.map((row) => ({ ...row }))),
+      loadAaChanges: (_path, file) => {
+        if (
+          file !== "summary.aa_changes.csv" &&
+          file !== "summary.variants.csv"
+        ) {
+          return Promise.reject(
+            new Error(`Unsupported amino-acid file: ${file}`),
+          );
+        }
+        return Promise.resolve(aaChangesData.map((row) => ({ ...row })));
+      },
       loadMetadata: () =>
         Promise.resolve(metadataData.map((row) => ({ ...row }))),
       ...overrides.experiments,
