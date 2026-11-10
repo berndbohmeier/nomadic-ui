@@ -138,6 +138,24 @@ async fn load_metadata(path: String) -> Result<Vec<metadata::BarcodeMetadata>, S
         .map_err(|error| format!("Metadata task failed: {error}"))?
 }
 
+#[cfg_attr(mobile, tauri::mobile_entry_point)]
+pub fn run() {
+    tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_opener::init())
+        .invoke_handler(tauri::generate_handler![
+            validate_workspace,
+            list_experiments,
+            load_experiment,
+            load_read_mapping,
+            load_region_coverage,
+            load_aa_changes,
+            load_metadata
+        ])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -198,22 +216,4 @@ mod tests {
     fn rejects_missing_dir() {
         assert!(read_experiment(std::path::Path::new("/definitely/not/here")).is_err());
     }
-}
-
-#[cfg_attr(mobile, tauri::mobile_entry_point)]
-pub fn run() {
-    tauri::Builder::default()
-        .plugin(tauri_plugin_dialog::init())
-        .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![
-            validate_workspace,
-            list_experiments,
-            load_experiment,
-            load_read_mapping,
-            load_region_coverage,
-            load_aa_changes,
-            load_metadata
-        ])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
 }

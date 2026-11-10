@@ -1,0 +1,192 @@
+name: CI and packages
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_BUILD_JOBS: "2"
+
+jobs:
+  version:
+    name: Validate release version
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 12.10.1
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+      - run: pnpm test:ci
+      - name: Validate tag and versions
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          TAG: ${{ github.ref_name }}
+        run: node .github/scripts/ci.mjs version "$TAG"
+
+  frontend:
+    name: Frontend ${{ matrix.check }}
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - check: lint
+            command: pnpm check && pnpm lint:ci
+          - check: build
+            command: pnpm build
+          - check: unit
+            command: pnpm test:unit --run
+          - check: storybook
+            command: pnpm test:storybook --run
+            browser: true
+          - check: e2e
+            command: pnpm test:e2e
+            browser: true
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 12.10.1
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Install Chromium
+        if: matrix.browser == true
+        run: pnpm exec playwright install --with-deps chromium
+      - run: ${{ matrix.command }}
+      - name: Upload browser diagnostics
+        if: failure() && matrix.browser == true
+        uses: actions/upload-artifact@v7
+        with:
+          name: diagnostics-${{ matrix.check }}
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
+
+  rust:
+    name: Rust ${{ matrix.check }}
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - check: format
+            command: cargo fmt --manifest-path src-tauri/Cargo.toml --all -- --check
+          - check: clippy
+            command: cargo clippy --manifest-path src-tauri/Cargo.toml --locked --all-targets -- -D warnings
+          - check: test
+            command: cargo test --manifest-path src-tauri/Cargo.toml --locked
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install Tauri Linux dependencies
+        if: matrix.check != 'format'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev patchelf libssl-dev libxdo-dev
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: swatinem/rust-cache@v2
+        if: matrix.check != 'format'
+        with:
+          workspaces: ./src-tauri -> target
+          key: rust-${{ matrix.check }}
+      - run: ${{ matrix.command }}
+
+  build:
+    name: Package ${{ matrix.name }}
+    needs: [version, frontend, rust]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-x64
+            runner: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+          - name: windows-x64
+            runner: windows-latest
+            target: x86_64-pc-windows-msvc
+          - name: macos-arm64
+            runner: macos-latest
+            target: aarch64-apple-darwin
+          - name: macos-x64
+            runner: macos-latest
+            target: x86_64-apple-darwin
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install Tauri Linux dependencies
+        if: matrix.name == 'linux-x64'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev patchelf libssl-dev libxdo-dev xdg-utils
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 12.10.1
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: ./src-tauri -> target
+          key: package-${{ matrix.name }}
+      - run: pnpm install --frozen-lockfile
+      - name: Build Tauri bundles
+        id: tauri
+        uses: tauri-apps/tauri-action@v1
+        with:
+          args: --target ${{ matrix.target }} -- --locked
+      - name: Stage installers
+        env:
+          TAURI_ARTIFACT_PATHS: ${{ steps.tauri.outputs.artifactPaths }}
+        run: node .github/scripts/ci.mjs stage ${{ matrix.name }} staged
+      - uses: actions/upload-artifact@v7
+        with:
+          name: bundle-${{ matrix.name }}
+          path: staged/
+          if-no-files-found: error
+          compression-level: 0
+
+  release:
+    name: Create or update draft release
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    concurrency:
+      group: release-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: bundle-*
+          path: bundles
+      - name: Validate and upload release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: bash .github/scripts/release.sh
