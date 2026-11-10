@@ -42,8 +42,9 @@ fn read_sample_metadata(path: &Path) -> Result<DataFrame, String> {
 
     // Probe the header with each supported separator. Polars handles quoted
     // fields here, including commas inside semicolon-delimited column names.
-    for separator in [b',', b';'] {
-        let options = metadata_options().map_parse_options(|parse| parse.with_separator(separator));
+    for separator in b",;" {
+        let options =
+            metadata_options().map_parse_options(|parse| parse.with_separator(*separator));
         match read_csv(path, options.clone().with_n_rows(Some(0))) {
             Ok(header) if header.column("barcode").is_ok() => {
                 return read_csv(path, options);
