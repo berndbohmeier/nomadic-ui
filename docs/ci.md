@@ -26,10 +26,15 @@ settings.
 
 ### Draft releases
 
-1. Set the same stable `MAJOR.MINOR.PATCH` version in `package.json`,
-   `src-tauri/tauri.conf.json`, and `src-tauri/Cargo.toml` (update
-   `src-tauri/Cargo.lock` when changing the Rust package version).
-2. Push a matching tag such as `v0.1.0`. Tags beginning with `v` that are not
+1. Run `pnpm release:prepare` and select a patch, minor, major, or manual
+   stable version. The script updates `package.json`,
+   `src-tauri/tauri.conf.json`, and `src-tauri/Cargo.toml`, then runs
+   `cargo update --workspace` to update `src-tauri/Cargo.lock`. Cargo must be
+   installed and may need network access. The Git index is unchanged; review
+   all changes, including any lockfile changes from Cargo, and commit them manually. Manual
+   versions must be stable `MAJOR.MINOR.PATCH` and greater than the current
+   version; inconsistent existing versions are rejected.
+2. Push the commit and a matching tag such as `v0.1.0`. Tags beginning with `v` that are not
    stable versions, or whose versions do not match, fail the workflow.
 3. Once all checks and all four builds pass, the workflow creates a draft
    GitHub release containing the installers. Review it before publishing.
