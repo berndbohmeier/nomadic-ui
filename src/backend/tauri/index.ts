@@ -1,6 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { open } from "@tauri-apps/plugin-dialog";
+import { revealItemInDir } from "@tauri-apps/plugin-opener";
 import type {
   Backend,
   AaChangeRow,
@@ -36,6 +37,9 @@ export function createTauriBackend(): Backend {
             reject(new Error(String(event.payload))),
           );
         });
+      },
+      openFolder(path) {
+        return revealItemInDir(path);
       },
       loadReadMapping(path) {
         return invoke<ReadMappingCounts[]>("load_read_mapping", { path });

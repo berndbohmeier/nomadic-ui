@@ -47,6 +47,10 @@ export function createMockBackend(
         }
         return Promise.resolve();
       },
+      openFolder: () =>
+        Promise.reject(
+          new Error("Opening folders is only available in the desktop app."),
+        ),
       loadReadMapping: () =>
         Promise.resolve(readMappingCountsData.map((row) => ({ ...row }))),
       loadRegionCoverage: () =>

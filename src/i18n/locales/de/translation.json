@@ -184,6 +184,8 @@
     },
     "view": {
       "error": "Dieses Experiment konnte nicht geladen werden.",
+      "openFolder": "Experimentordner im Datei-Explorer öffnen",
+      "openFolderError": "Der Experimentordner konnte nicht im Datei-Explorer geöffnet werden.",
       "openInNewWindow": "Experiment in neuem Fenster öffnen",
       "openInNewWindowError": "Dieses Experiment konnte nicht in einem neuen Fenster geöffnet werden."
     }

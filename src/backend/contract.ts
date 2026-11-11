@@ -82,6 +82,8 @@ export interface Backend {
     load(path: string): Promise<ExperimentInfo>;
     /** Opens the experiment in a new application window. */
     openInNewWindow(path: string, title: string): Promise<void>;
+    /** Opens the experiment folder in the operating system's file explorer. */
+    openFolder(path: string): Promise<void>;
     /** Rows of the read mapping file only; no sample metadata. */
     loadReadMapping(path: string): Promise<ReadMappingCounts[]>;
     /** Amplicon coverage rows; unclassified rows are excluded. */

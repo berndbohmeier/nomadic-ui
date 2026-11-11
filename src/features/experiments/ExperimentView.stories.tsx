@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { ExperimentView } from "./ExperimentView";
 
 const base = {
@@ -32,6 +32,27 @@ export const AllPanels: Story = {
         "summary.aa_changes.csv",
       ],
     },
+  },
+};
+const openFolder = fn(() => Promise.resolve());
+export const OpenExperimentFolder: Story = {
+  args: {
+    experiment: { ...base, files: [] },
+  },
+  parameters: {
+    testProviders: {
+      backend: { experiments: { openFolder } },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    openFolder.mockClear();
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", {
+        name: "Open experiment folder in file explorer",
+      }),
+    );
+    await expect(openFolder).toHaveBeenCalledWith(base.path);
   },
 };
 export const SlowAminoAcidLoading: Story = {

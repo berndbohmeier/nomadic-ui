@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import type { ExperimentInfo } from "../../backend/contract";
 import { BarcodesLink } from "./barcodes/BarcodesLink";
 import { BarcodeSelectionProvider } from "./barcodes/BarcodeSelection";
+import { OpenExperimentFolderButton } from "./OpenExperimentFolderButton";
 import { OpenExperimentWindowButton } from "./OpenExperimentWindowButton";
 import { getAvailablePanels } from "./panels/registry";
 import { SettingsPanel } from "./SettingsPanel";
@@ -48,9 +49,16 @@ function ExperimentContent({ experiment }: ExperimentViewProps) {
           </Group>
           <BarcodesLink />
         </Group>
-        <Text c="dimmed" size="sm" style={{ wordBreak: "break-all" }}>
-          {experiment.path}
-        </Text>
+        <Group gap="xs" wrap="nowrap" align="start" style={{ minWidth: 0 }}>
+          <Text
+            c="dimmed"
+            size="sm"
+            style={{ minWidth: 0, wordBreak: "break-all" }}
+          >
+            {experiment.path}
+          </Text>
+          <OpenExperimentFolderButton path={experiment.path} />
+        </Group>
         <Tabs.List mt="xs">
           {panels.map(({ panel }) => (
             <Tabs.Tab key={panel.id} value={panel.id}>

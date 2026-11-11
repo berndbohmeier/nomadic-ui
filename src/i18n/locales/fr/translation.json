@@ -184,6 +184,8 @@
     },
     "view": {
       "error": "Impossible de charger cette expérience.",
+      "openFolder": "Ouvrir le dossier de l’expérience dans l’explorateur de fichiers",
+      "openFolderError": "Impossible d’ouvrir le dossier de l’expérience dans l’explorateur de fichiers.",
       "openInNewWindow": "Ouvrir l’expérience dans une nouvelle fenêtre",
       "openInNewWindowError": "Impossible d’ouvrir cette expérience dans une nouvelle fenêtre."
     }
