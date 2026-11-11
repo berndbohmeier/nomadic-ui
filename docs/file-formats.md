@@ -27,7 +27,7 @@ mutation-type filter is applied. Required columns:
 | `aa_change` |                                          |
 | `aa_call`   | Must be one of the calls listed above    |
 | `aa_dp`     | Unsigned integer; empty means unreported |
-| `aa_wsaf`   | Float in `0`–`1`; empty means unreported |
+| `aa_wsaf`   | Float; values above `1` are clamped to `1`; empty means unreported |
 
 Additional columns such as `chrom`, `amplicon`, `aa_pos`, and `nt_change` are
 ignored.
@@ -44,7 +44,7 @@ Required columns:
 | `aa_change` | Rows with a blank or `.` value are skipped               |
 | `gt`        | Genotype, see mapping below                              |
 | `dp`        | Depth; see parsing rules below                           |
-| `wsaf`      | Float in `0`–`1`; `.` or empty means unreported          |
+| `wsaf`      | Float; values above `1` are clamped to `1`; `.` or empty means unreported |
 | `mut_type`  | Only rows containing `missense` are kept                 |
 
 Other columns (`chrom`, `pos`, `ref`, `alt`, `qual`, `aa_pos`, `strand`,
@@ -90,7 +90,8 @@ For both formats:
 
 - `barcode`, `gene`, and `aa_change` must be non-empty.
 - Rows with the barcode `unclassified` are skipped.
-- `aa_wsaf` must be finite and within `0`–`1`.
+- `aa_wsaf` must be finite and non-negative; values above `1` are clamped to `1`
+  as a temporary workaround for a processing-pipeline bug.
 - `aa_depth` must not exceed `9007199254740991`.
 - A duplicate `(barcode, gene, aa_change)` combination is an error.
 - A missing required column, an unreadable file, or an unsupported file name is

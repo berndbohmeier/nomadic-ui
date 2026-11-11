@@ -218,8 +218,12 @@ fn parse(frame: &DataFrame, legacy: bool) -> Result<Vec<AaChangeRow>, String> {
                 index + 2
             ));
         }
-        let aa_wsaf = wsaf.get(index);
-        if aa_wsaf.is_some_and(|value| !value.is_finite() || !(0.0..=1.0).contains(&value)) {
+        let mut aa_wsaf = wsaf.get(index);
+        // Temporary workaround for a processing-pipeline bug that can produce WSAF above 1.
+        if aa_wsaf.is_some_and(|value| value.is_finite() && value > 1.0) {
+            aa_wsaf = Some(1.0);
+        }
+        if aa_wsaf.is_some_and(|value| !value.is_finite() || value < 0.0 || value > 1.0) {
             return Err(format!("Invalid amino-acid WSAF on row {}", index + 2));
         }
         rows.push(AaChangeRow {
@@ -337,7 +341,6 @@ mod tests {
         let header = "barcode,gene,aa_change,aa_call,aa_dp,aa_wsaf\n";
         for rows in [
             "barcode01,g,A1T,unknown,1,0\n",
-            "barcode01,g,A1T,wt,1,1.1\n",
             "barcode01,g,A1T,wt,1,0\nbarcode01,g,A1T,wt,1,0\n",
         ] {
             assert!(parse(&frame(&format!("{header}{rows}"), false), false).is_err());
@@ -362,7 +365,7 @@ mod tests {
             true,
         );
         assert!(parse(&invalid_gene, true).is_err());
-        for value in ["-0.1", "1.1", "NaN", "inf"] {
+        for value in ["-0.1", "NaN", "inf"] {
             let csv =
                 format!("barcode,amplicon,aa_change,gt,dp,wsaf,mut_type\nbarcode01,g,A1T,0/0,1,{value},missense\n");
             assert!(parse(&frame(&csv, true), true).is_err(), "{value}");
@@ -379,6 +382,34 @@ mod tests {
         .unwrap();
         assert!(rows.is_empty());
         assert!(load(Path::new("."), "../summary.aa_changes.csv").is_err());
+    }
+
+    #[test]
+    fn clamps_wsaf_above_one_to_one() {
+        let current = frame(
+            "barcode,gene,aa_change,aa_call,aa_dp,aa_wsaf\nbarcode01,g,A1T,wt,1,1.1\n",
+            false,
+        );
+        assert_eq!(parse(&current, false).unwrap()[0].aa_wsaf, Some(1.0));
+
+        let legacy = frame(
+            "barcode,amplicon,aa_change,gt,dp,wsaf,mut_type\nbarcode01,g,A1T,0/0,1,1.1,missense\n",
+            true,
+        );
+        assert_eq!(parse(&legacy, true).unwrap()[0].aa_wsaf, Some(1.0));
+
+        for (csv, legacy) in [
+            (
+                "barcode,gene,aa_change,aa_call,aa_dp,aa_wsaf\nbarcode01,g,A1T,wt,1,-0.1\n",
+                false,
+            ),
+            (
+                "barcode,amplicon,aa_change,gt,dp,wsaf,mut_type\nbarcode01,g,A1T,0/0,1,-0.1,missense\n",
+                true,
+            ),
+        ] {
+            assert!(parse(&frame(csv, legacy), legacy).is_err());
+        }
     }
 
     #[test]
